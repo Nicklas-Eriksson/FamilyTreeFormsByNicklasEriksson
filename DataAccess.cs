@@ -19,7 +19,8 @@ namespace FamilyTree
                 //return connection.Query<Person>($"select * from People where fullName = '{name}'").ToList();
 
                 //This one is safer
-                return connection.Query<Person>("dbo.spPeople_GetAll").ToList();
+                var fullList = connection.Query<Person>("dbo.spPeople_GetAll").ToList();
+                return fullList;
             }
         }
     }

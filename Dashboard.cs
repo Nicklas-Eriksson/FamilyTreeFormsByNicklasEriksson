@@ -13,6 +13,7 @@ namespace FamilyTree
     public partial class Dashboard : Form
     {
         private List<Person> people = new List<Person>();
+        private List<Person> foundPerson = new List<Person>();
 
         public Dashboard()
         {
@@ -25,10 +26,17 @@ namespace FamilyTree
             var db = new DataAccess();
             people = db.GetPeopleByName(SearchText.Text); //SearchText refers to the search bar
 
-
+            for (int i = 0; i < people.Count; i++)
+            {
+                if(people[i].fullName == SearchText.Text)
+                {                    
+                    foundPerson.Add(people[i]);
+                    break;
+                }
+            }
 
             GetMotherAndFatherNameFromID();
-            GettFullInfo();
+            GettFoundPersonInfo();
         }
 
         private void GetMotherAndFatherNameFromID()
@@ -51,6 +59,31 @@ namespace FamilyTree
                 }
             }
         }
+
+        private void GettFoundPersonInfo()
+        {
+            ListBoxName.DataSource = foundPerson;
+            ListBoxName.DisplayMember = "GetFullName";
+
+            ListBoxYOB.DataSource = foundPerson;
+            ListBoxYOB.DisplayMember = "GetYearOfBirth";
+
+            ListBoxPOB.DataSource = foundPerson;
+            ListBoxPOB.DisplayMember = "GetPlaceOfBirth";
+
+            ListBoxMother.DataSource = foundPerson;
+            ListBoxMother.DisplayMember = "GetMotherName";
+
+            ListBoxFather.DataSource = foundPerson;
+            ListBoxFather.DisplayMember = "GetFatherName";
+
+            ListBoxYOD.DataSource = foundPerson;
+            ListBoxYOD.DisplayMember = "GetYearOfDeath";
+
+            ListBoxPOD.DataSource = foundPerson;
+            ListBoxPOD.DisplayMember = "GetPlaceOfDeath";
+        }
+
         private void GettFullInfo()
         {
             ListBoxName.DataSource = people;

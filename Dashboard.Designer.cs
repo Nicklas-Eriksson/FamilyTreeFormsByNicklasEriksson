@@ -257,7 +257,7 @@ namespace FamilyTree
             // 
             this.TreePNGBox.Image = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.Image")));
             this.TreePNGBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.InitialImage")));
-            this.TreePNGBox.Location = new System.Drawing.Point(796, 428);
+            this.TreePNGBox.Location = new System.Drawing.Point(799, 411);
             this.TreePNGBox.Name = "TreePNGBox";
             this.TreePNGBox.Size = new System.Drawing.Size(354, 320);
             this.TreePNGBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
