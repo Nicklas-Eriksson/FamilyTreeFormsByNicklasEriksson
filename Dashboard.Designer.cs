@@ -30,8 +30,6 @@ namespace FamilyTree
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
-            this.SearchLabel = new System.Windows.Forms.Label();
-            this.SearchResultLabel = new System.Windows.Forms.Label();
             this.ListBoxName = new System.Windows.Forms.ListBox();
             this.SearchText = new System.Windows.Forms.TextBox();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -52,7 +50,6 @@ namespace FamilyTree
             this.TextBoxMother = new System.Windows.Forms.TextBox();
             this.TextBoxPlaceOfDeath = new System.Windows.Forms.TextBox();
             this.InsertButton = new System.Windows.Forms.Button();
-            this.SearchGlassPNGBox = new System.Windows.Forms.PictureBox();
             this.TreePNGBox = new System.Windows.Forms.PictureBox();
             this.FamilyTreeLogoLabel = new System.Windows.Forms.Label();
             this.DisplayYearOfBirthLabel = new System.Windows.Forms.Label();
@@ -68,42 +65,18 @@ namespace FamilyTree
             this.ListBoxFather = new System.Windows.Forms.ListBox();
             this.ListBoxMother = new System.Windows.Forms.ListBox();
             this.ListBoxPOD = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.SearchGlassPNGBox)).BeginInit();
+            this.SearchLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // SearchLabel
-            // 
-            this.SearchLabel.AutoSize = true;
-            this.SearchLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SearchLabel.ForeColor = System.Drawing.Color.Yellow;
-            this.SearchLabel.Location = new System.Drawing.Point(13, 11);
-            this.SearchLabel.Name = "SearchLabel";
-            this.SearchLabel.Size = new System.Drawing.Size(86, 25);
-            this.SearchLabel.TabIndex = 1;
-            this.SearchLabel.Text = "Search";
-            this.SearchLabel.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // SearchResultLabel
-            // 
-            this.SearchResultLabel.AutoSize = true;
-            this.SearchResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SearchResultLabel.ForeColor = System.Drawing.Color.Yellow;
-            this.SearchResultLabel.Location = new System.Drawing.Point(12, 80);
-            this.SearchResultLabel.Name = "SearchResultLabel";
-            this.SearchResultLabel.Size = new System.Drawing.Size(172, 25);
-            this.SearchResultLabel.TabIndex = 2;
-            this.SearchResultLabel.Text = "Search Results";
-            this.SearchResultLabel.Click += new System.EventHandler(this.label2_Click);
-            // 
             // ListBoxName
             // 
-            this.ListBoxName.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxName.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxName.FormattingEnabled = true;
-            this.ListBoxName.ItemHeight = 33;
+            this.ListBoxName.ItemHeight = 19;
             this.ListBoxName.Location = new System.Drawing.Point(9, 137);
             this.ListBoxName.Name = "ListBoxName";
-            this.ListBoxName.Size = new System.Drawing.Size(253, 268);
+            this.ListBoxName.Size = new System.Drawing.Size(253, 251);
             this.ListBoxName.TabIndex = 3;
             this.ListBoxName.SelectedIndexChanged += new System.EventHandler(this.PeopleFoundListBox_SelectedIndexChanged);
             // 
@@ -128,7 +101,7 @@ namespace FamilyTree
             // DisplayNameLabel
             // 
             this.DisplayNameLabel.AutoSize = true;
-            this.DisplayNameLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.DisplayNameLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayNameLabel.Location = new System.Drawing.Point(106, 110);
             this.DisplayNameLabel.Name = "DisplayNameLabel";
             this.DisplayNameLabel.Size = new System.Drawing.Size(61, 24);
@@ -141,7 +114,7 @@ namespace FamilyTree
             this.AddNewMemberLabel.AutoSize = true;
             this.AddNewMemberLabel.BackColor = System.Drawing.Color.Transparent;
             this.AddNewMemberLabel.Font = new System.Drawing.Font("NSimSun", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddNewMemberLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.AddNewMemberLabel.ForeColor = System.Drawing.Color.Crimson;
             this.AddNewMemberLabel.Location = new System.Drawing.Point(10, 428);
             this.AddNewMemberLabel.Name = "AddNewMemberLabel";
             this.AddNewMemberLabel.Size = new System.Drawing.Size(372, 33);
@@ -152,7 +125,7 @@ namespace FamilyTree
             // NameInsLabel
             // 
             this.NameInsLabel.AutoSize = true;
-            this.NameInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.NameInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.NameInsLabel.Location = new System.Drawing.Point(15, 473);
             this.NameInsLabel.Name = "NameInsLabel";
             this.NameInsLabel.Size = new System.Drawing.Size(61, 24);
@@ -163,7 +136,7 @@ namespace FamilyTree
             // YearOfBirthInsLabel
             // 
             this.YearOfBirthInsLabel.AutoSize = true;
-            this.YearOfBirthInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.YearOfBirthInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.YearOfBirthInsLabel.Location = new System.Drawing.Point(15, 508);
             this.YearOfBirthInsLabel.Name = "YearOfBirthInsLabel";
             this.YearOfBirthInsLabel.Size = new System.Drawing.Size(110, 24);
@@ -173,7 +146,7 @@ namespace FamilyTree
             // PlaceOfBirthInsLabel
             // 
             this.PlaceOfBirthInsLabel.AutoSize = true;
-            this.PlaceOfBirthInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.PlaceOfBirthInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.PlaceOfBirthInsLabel.Location = new System.Drawing.Point(15, 543);
             this.PlaceOfBirthInsLabel.Name = "PlaceOfBirthInsLabel";
             this.PlaceOfBirthInsLabel.Size = new System.Drawing.Size(118, 24);
@@ -183,7 +156,7 @@ namespace FamilyTree
             // MotherInsLabel
             // 
             this.MotherInsLabel.AutoSize = true;
-            this.MotherInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.MotherInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.MotherInsLabel.Location = new System.Drawing.Point(15, 577);
             this.MotherInsLabel.Name = "MotherInsLabel";
             this.MotherInsLabel.Size = new System.Drawing.Size(69, 24);
@@ -193,7 +166,7 @@ namespace FamilyTree
             // FatherInsLabel
             // 
             this.FatherInsLabel.AutoSize = true;
-            this.FatherInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.FatherInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.FatherInsLabel.Location = new System.Drawing.Point(15, 612);
             this.FatherInsLabel.Name = "FatherInsLabel";
             this.FatherInsLabel.Size = new System.Drawing.Size(64, 24);
@@ -204,7 +177,7 @@ namespace FamilyTree
             // YearOfDeathInsLabel
             // 
             this.YearOfDeathInsLabel.AutoSize = true;
-            this.YearOfDeathInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.YearOfDeathInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.YearOfDeathInsLabel.Location = new System.Drawing.Point(14, 647);
             this.YearOfDeathInsLabel.Name = "YearOfDeathInsLabel";
             this.YearOfDeathInsLabel.Size = new System.Drawing.Size(121, 24);
@@ -214,7 +187,7 @@ namespace FamilyTree
             // PlaceOfDeathInsLabel
             // 
             this.PlaceOfDeathInsLabel.AutoSize = true;
-            this.PlaceOfDeathInsLabel.ForeColor = System.Drawing.Color.Purple;
+            this.PlaceOfDeathInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.PlaceOfDeathInsLabel.Location = new System.Drawing.Point(15, 682);
             this.PlaceOfDeathInsLabel.Name = "PlaceOfDeathInsLabel";
             this.PlaceOfDeathInsLabel.Size = new System.Drawing.Size(129, 24);
@@ -280,25 +253,13 @@ namespace FamilyTree
             this.InsertButton.UseVisualStyleBackColor = true;
             this.InsertButton.Click += new System.EventHandler(this.InsertButton_Click);
             // 
-            // SearchGlassPNGBox
-            // 
-            this.SearchGlassPNGBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.SearchGlassPNGBox.Image = ((System.Drawing.Image)(resources.GetObject("SearchGlassPNGBox.Image")));
-            this.SearchGlassPNGBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("SearchGlassPNGBox.InitialImage")));
-            this.SearchGlassPNGBox.Location = new System.Drawing.Point(101, 12);
-            this.SearchGlassPNGBox.Name = "SearchGlassPNGBox";
-            this.SearchGlassPNGBox.Size = new System.Drawing.Size(24, 24);
-            this.SearchGlassPNGBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.SearchGlassPNGBox.TabIndex = 24;
-            this.SearchGlassPNGBox.TabStop = false;
-            // 
             // TreePNGBox
             // 
             this.TreePNGBox.Image = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.Image")));
             this.TreePNGBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.InitialImage")));
-            this.TreePNGBox.Location = new System.Drawing.Point(735, 428);
+            this.TreePNGBox.Location = new System.Drawing.Point(796, 428);
             this.TreePNGBox.Name = "TreePNGBox";
-            this.TreePNGBox.Size = new System.Drawing.Size(415, 320);
+            this.TreePNGBox.Size = new System.Drawing.Size(354, 320);
             this.TreePNGBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.TreePNGBox.TabIndex = 26;
             this.TreePNGBox.TabStop = false;
@@ -307,7 +268,7 @@ namespace FamilyTree
             // 
             this.FamilyTreeLogoLabel.AutoSize = true;
             this.FamilyTreeLogoLabel.Font = new System.Drawing.Font("NSimSun", 50.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FamilyTreeLogoLabel.ForeColor = System.Drawing.Color.Yellow;
+            this.FamilyTreeLogoLabel.ForeColor = System.Drawing.Color.Crimson;
             this.FamilyTreeLogoLabel.Location = new System.Drawing.Point(563, 12);
             this.FamilyTreeLogoLabel.Name = "FamilyTreeLogoLabel";
             this.FamilyTreeLogoLabel.Size = new System.Drawing.Size(414, 67);
@@ -318,7 +279,7 @@ namespace FamilyTree
             // DisplayYearOfBirthLabel
             // 
             this.DisplayYearOfBirthLabel.AutoSize = true;
-            this.DisplayYearOfBirthLabel.ForeColor = System.Drawing.Color.Purple;
+            this.DisplayYearOfBirthLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayYearOfBirthLabel.Location = new System.Drawing.Point(267, 110);
             this.DisplayYearOfBirthLabel.Name = "DisplayYearOfBirthLabel";
             this.DisplayYearOfBirthLabel.Size = new System.Drawing.Size(91, 24);
@@ -340,7 +301,7 @@ namespace FamilyTree
             // DisplayPlaceOfDeathLabel
             // 
             this.DisplayPlaceOfDeathLabel.AutoSize = true;
-            this.DisplayPlaceOfDeathLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.DisplayPlaceOfDeathLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayPlaceOfDeathLabel.Location = new System.Drawing.Point(1086, 110);
             this.DisplayPlaceOfDeathLabel.Name = "DisplayPlaceOfDeathLabel";
             this.DisplayPlaceOfDeathLabel.Size = new System.Drawing.Size(112, 24);
@@ -350,7 +311,7 @@ namespace FamilyTree
             // DisplayFatherLabel
             // 
             this.DisplayFatherLabel.AutoSize = true;
-            this.DisplayFatherLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.DisplayFatherLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayFatherLabel.Location = new System.Drawing.Point(841, 110);
             this.DisplayFatherLabel.Name = "DisplayFatherLabel";
             this.DisplayFatherLabel.Size = new System.Drawing.Size(64, 24);
@@ -360,7 +321,7 @@ namespace FamilyTree
             // DisplayYearOfDeathLabel
             // 
             this.DisplayYearOfDeathLabel.AutoSize = true;
-            this.DisplayYearOfDeathLabel.ForeColor = System.Drawing.Color.Purple;
+            this.DisplayYearOfDeathLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayYearOfDeathLabel.Location = new System.Drawing.Point(984, 110);
             this.DisplayYearOfDeathLabel.Name = "DisplayYearOfDeathLabel";
             this.DisplayYearOfDeathLabel.Size = new System.Drawing.Size(102, 24);
@@ -378,7 +339,7 @@ namespace FamilyTree
             // DisplayPlaceOfBirthLabel
             // 
             this.DisplayPlaceOfBirthLabel.AutoSize = true;
-            this.DisplayPlaceOfBirthLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.DisplayPlaceOfBirthLabel.ForeColor = System.Drawing.Color.Fuchsia;
             this.DisplayPlaceOfBirthLabel.Location = new System.Drawing.Point(370, 110);
             this.DisplayPlaceOfBirthLabel.Name = "DisplayPlaceOfBirthLabel";
             this.DisplayPlaceOfBirthLabel.Size = new System.Drawing.Size(99, 24);
@@ -387,65 +348,77 @@ namespace FamilyTree
             // 
             // ListBoxYOB
             // 
-            this.ListBoxYOB.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxYOB.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxYOB.FormattingEnabled = true;
-            this.ListBoxYOB.ItemHeight = 33;
+            this.ListBoxYOB.ItemHeight = 19;
             this.ListBoxYOB.Location = new System.Drawing.Point(268, 137);
             this.ListBoxYOB.Name = "ListBoxYOB";
-            this.ListBoxYOB.Size = new System.Drawing.Size(90, 268);
+            this.ListBoxYOB.Size = new System.Drawing.Size(90, 251);
             this.ListBoxYOB.TabIndex = 35;
             this.ListBoxYOB.SelectedIndexChanged += new System.EventHandler(this.ListBoxYOB_SelectedIndexChanged);
             // 
             // ListBoxPOB
             // 
-            this.ListBoxPOB.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxPOB.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxPOB.FormattingEnabled = true;
-            this.ListBoxPOB.ItemHeight = 33;
+            this.ListBoxPOB.ItemHeight = 19;
             this.ListBoxPOB.Location = new System.Drawing.Point(364, 137);
             this.ListBoxPOB.Name = "ListBoxPOB";
-            this.ListBoxPOB.Size = new System.Drawing.Size(105, 268);
+            this.ListBoxPOB.Size = new System.Drawing.Size(105, 251);
             this.ListBoxPOB.TabIndex = 36;
             this.ListBoxPOB.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // ListBoxYOD
             // 
-            this.ListBoxYOD.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxYOD.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxYOD.FormattingEnabled = true;
-            this.ListBoxYOD.ItemHeight = 33;
+            this.ListBoxYOD.ItemHeight = 19;
             this.ListBoxYOD.Location = new System.Drawing.Point(994, 137);
             this.ListBoxYOD.Name = "ListBoxYOD";
-            this.ListBoxYOD.Size = new System.Drawing.Size(90, 268);
+            this.ListBoxYOD.Size = new System.Drawing.Size(90, 251);
             this.ListBoxYOD.TabIndex = 39;
             // 
             // ListBoxFather
             // 
-            this.ListBoxFather.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxFather.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxFather.FormattingEnabled = true;
-            this.ListBoxFather.ItemHeight = 33;
+            this.ListBoxFather.ItemHeight = 19;
             this.ListBoxFather.Location = new System.Drawing.Point(735, 137);
             this.ListBoxFather.Name = "ListBoxFather";
-            this.ListBoxFather.Size = new System.Drawing.Size(253, 268);
+            this.ListBoxFather.Size = new System.Drawing.Size(253, 251);
             this.ListBoxFather.TabIndex = 38;
             // 
             // ListBoxMother
             // 
-            this.ListBoxMother.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxMother.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxMother.FormattingEnabled = true;
-            this.ListBoxMother.ItemHeight = 33;
+            this.ListBoxMother.ItemHeight = 19;
             this.ListBoxMother.Location = new System.Drawing.Point(476, 137);
             this.ListBoxMother.Name = "ListBoxMother";
-            this.ListBoxMother.Size = new System.Drawing.Size(253, 268);
+            this.ListBoxMother.Size = new System.Drawing.Size(253, 251);
             this.ListBoxMother.TabIndex = 37;
             // 
             // ListBoxPOD
             // 
-            this.ListBoxPOD.Font = new System.Drawing.Font("Segoe Print", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBoxPOD.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxPOD.FormattingEnabled = true;
-            this.ListBoxPOD.ItemHeight = 33;
+            this.ListBoxPOD.ItemHeight = 19;
             this.ListBoxPOD.Location = new System.Drawing.Point(1090, 137);
             this.ListBoxPOD.Name = "ListBoxPOD";
-            this.ListBoxPOD.Size = new System.Drawing.Size(105, 268);
+            this.ListBoxPOD.Size = new System.Drawing.Size(105, 251);
             this.ListBoxPOD.TabIndex = 40;
+            // 
+            // SearchLabel
+            // 
+            this.SearchLabel.AutoSize = true;
+            this.SearchLabel.Font = new System.Drawing.Font("NSimSun", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SearchLabel.ForeColor = System.Drawing.Color.Crimson;
+            this.SearchLabel.Location = new System.Drawing.Point(13, 11);
+            this.SearchLabel.Name = "SearchLabel";
+            this.SearchLabel.Size = new System.Drawing.Size(82, 21);
+            this.SearchLabel.TabIndex = 1;
+            this.SearchLabel.Text = "Search";
+            this.SearchLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // Dashboard
             // 
@@ -468,7 +441,6 @@ namespace FamilyTree
             this.Controls.Add(this.DisplayYearOfBirthLabel);
             this.Controls.Add(this.FamilyTreeLogoLabel);
             this.Controls.Add(this.TreePNGBox);
-            this.Controls.Add(this.SearchGlassPNGBox);
             this.Controls.Add(this.InsertButton);
             this.Controls.Add(this.TextBoxPlaceOfDeath);
             this.Controls.Add(this.TextBoxYearOfDeath);
@@ -489,7 +461,6 @@ namespace FamilyTree
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.SearchText);
             this.Controls.Add(this.ListBoxName);
-            this.Controls.Add(this.SearchResultLabel);
             this.Controls.Add(this.SearchLabel);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Black;
@@ -497,7 +468,6 @@ namespace FamilyTree
             this.Name = "Dashboard";
             this.Text = "Family Tree";
             this.Load += new System.EventHandler(this.Dashboard_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.SearchGlassPNGBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -505,8 +475,6 @@ namespace FamilyTree
         }
 
         #endregion
-        private System.Windows.Forms.Label SearchLabel;
-        private System.Windows.Forms.Label SearchResultLabel;
         private System.Windows.Forms.ListBox ListBoxName;
         private System.Windows.Forms.TextBox SearchText;
         private System.Windows.Forms.Button SearchButton;
@@ -527,7 +495,6 @@ namespace FamilyTree
         private System.Windows.Forms.TextBox TextBoxMother;
         private System.Windows.Forms.TextBox TextBoxPlaceOfDeath;
         private System.Windows.Forms.Button InsertButton;
-        private System.Windows.Forms.PictureBox SearchGlassPNGBox;
         private System.Windows.Forms.PictureBox TreePNGBox;
         private System.Windows.Forms.Label FamilyTreeLogoLabel;
         private System.Windows.Forms.Label DisplayYearOfBirthLabel;
@@ -543,6 +510,7 @@ namespace FamilyTree
         private System.Windows.Forms.ListBox ListBoxFather;
         private System.Windows.Forms.ListBox ListBoxMother;
         private System.Windows.Forms.ListBox ListBoxPOD;
+        private System.Windows.Forms.Label SearchLabel;
     }
 }
 

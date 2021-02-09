@@ -29,15 +29,15 @@ namespace FamilyTree
         }
         public string GetPlaceOfBirth
         {
-            get { return placeOfBirth; }
+            get { if (placeOfBirth == null) { return "--"; } else { return placeOfBirth; } }
         }
         public string GetMotherName
         {
-            get { if (fatherName == null) { return "-no register found-"; } else { return motherName; } }
+            get { if (motherName == null) { return "--"; } else { return motherName; } }
         }
         public string GetFatherName
         {
-            get { if (fatherName == null){ return "-no register found-"; } else{return fatherName; } }
+            get { if (fatherName == null){ return "--"; } else{return fatherName; } }
         }
         public string GetYearOfDeath
         {

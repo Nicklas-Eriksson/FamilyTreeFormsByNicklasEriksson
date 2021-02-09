@@ -12,8 +12,45 @@ namespace FamilyTree
 {
     public partial class Dashboard : Form
     {
-        public List<Person> people = new List<Person>();
+        private List<Person> people = new List<Person>();
 
+        public Dashboard()
+        {
+            InitializeComponent();
+            GettFullInfo();
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            var db = new DataAccess();
+            people = db.GetPeopleByName(SearchText.Text); //SearchText refers to the search bar
+
+
+
+            GetMotherAndFatherNameFromID();
+            GettFullInfo();
+        }
+
+        private void GetMotherAndFatherNameFromID()
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                for (int j = 0; j < people.Count; j++)
+                {
+                    if (people[i].motherId == people[j].Id)
+                    {
+                        people[i].motherName = people[j].fullName;
+                    }
+                }
+                for (int k = 0; k < people.Count; k++)
+                {
+                    if (people[i].fatherId == people[k].Id)
+                    {
+                        people[i].fatherName = people[k].fullName;
+                    }
+                }
+            }
+        }
         private void GettFullInfo()
         {
             ListBoxName.DataSource = people;
@@ -37,45 +74,6 @@ namespace FamilyTree
             ListBoxPOD.DataSource = people;
             ListBoxPOD.DisplayMember = "GetPlaceOfDeath";
         }
-
-        public Dashboard()
-        {
-            InitializeComponent();
-            GettFullInfo();
-        }
-
-        private void SearchButton_Click(object sender, EventArgs e)
-        {
-            var db = new DataAccess();
-            people = db.GetPeopleByName(SearchText.Text); //SearchText refers to the search bar
-
-
-            for (int i = 0; i < people.Count; i++)
-            {
-                for (int j = 0; j < people.Count; j++)
-                {
-                    if (people[i].motherId == people[j].Id)
-                    {
-                        people[i].motherName = people[j].fullName;
-                    }
-                }
-                for (int k = 0; k < people.Count; k++)
-                {
-                    if (people[i].fatherId == people[k].Id)
-                    {
-                        people[i].fatherName = people[k].fullName;
-                    }
-                }
-            }
-            //SetParentIdToName(people);
-
-            GettFullInfo();
-        }
-
-        //public List<Person> SetParentIdToName(List<Person> person) 
-        //{ 
-
-        //}
 
         private void InsertButton_Click(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }
