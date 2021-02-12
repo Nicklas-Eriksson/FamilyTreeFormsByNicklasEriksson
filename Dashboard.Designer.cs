@@ -44,7 +44,7 @@ namespace FamilyTree
             this.PlaceOfDeathInsLabel = new System.Windows.Forms.Label();
             this.TextBoxName = new System.Windows.Forms.TextBox();
             this.TextBoxYearOfBirth = new System.Windows.Forms.TextBox();
-            this.TextBoxPlaceOfBith = new System.Windows.Forms.TextBox();
+            this.TextBoxPlaceOfBirth = new System.Windows.Forms.TextBox();
             this.TextBoxYearOfDeath = new System.Windows.Forms.TextBox();
             this.TextBoxFather = new System.Windows.Forms.TextBox();
             this.TextBoxMother = new System.Windows.Forms.TextBox();
@@ -67,6 +67,8 @@ namespace FamilyTree
             this.ListBoxPOD = new System.Windows.Forms.ListBox();
             this.SearchLabel = new System.Windows.Forms.Label();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
+            this.NewDatabaseButton = new System.Windows.Forms.Button();
+            this.SearchMenu = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,7 +85,7 @@ namespace FamilyTree
             // 
             // SearchText
             // 
-            this.SearchText.Location = new System.Drawing.Point(16, 39);
+            this.SearchText.Location = new System.Drawing.Point(12, 47);
             this.SearchText.Name = "SearchText";
             this.SearchText.Size = new System.Drawing.Size(249, 29);
             this.SearchText.TabIndex = 4;
@@ -91,7 +93,7 @@ namespace FamilyTree
             // 
             // SearchButton
             // 
-            this.SearchButton.Location = new System.Drawing.Point(271, 40);
+            this.SearchButton.Location = new System.Drawing.Point(267, 48);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(92, 29);
             this.SearchButton.TabIndex = 5;
@@ -202,7 +204,7 @@ namespace FamilyTree
             // 
             // TextBoxName
             // 
-            this.TextBoxName.Location = new System.Drawing.Point(213, 473);
+            this.TextBoxName.Location = new System.Drawing.Point(156, 470);
             this.TextBoxName.Name = "TextBoxName";
             this.TextBoxName.Size = new System.Drawing.Size(249, 29);
             this.TextBoxName.TabIndex = 16;
@@ -210,23 +212,23 @@ namespace FamilyTree
             // 
             // TextBoxYearOfBirth
             // 
-            this.TextBoxYearOfBirth.Location = new System.Drawing.Point(213, 508);
+            this.TextBoxYearOfBirth.Location = new System.Drawing.Point(156, 505);
             this.TextBoxYearOfBirth.Name = "TextBoxYearOfBirth";
             this.TextBoxYearOfBirth.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfBirth.TabIndex = 17;
             this.TextBoxYearOfBirth.TextChanged += new System.EventHandler(this.TextBoxYearOfBirth_TextChanged);
             // 
-            // TextBoxPlaceOfBith
+            // TextBoxPlaceOfBirth
             // 
-            this.TextBoxPlaceOfBith.Location = new System.Drawing.Point(213, 543);
-            this.TextBoxPlaceOfBith.Name = "TextBoxPlaceOfBith";
-            this.TextBoxPlaceOfBith.Size = new System.Drawing.Size(249, 29);
-            this.TextBoxPlaceOfBith.TabIndex = 18;
-            this.TextBoxPlaceOfBith.TextChanged += new System.EventHandler(this.TextBoxPlaceOfBith_TextChanged);
+            this.TextBoxPlaceOfBirth.Location = new System.Drawing.Point(156, 540);
+            this.TextBoxPlaceOfBirth.Name = "TextBoxPlaceOfBirth";
+            this.TextBoxPlaceOfBirth.Size = new System.Drawing.Size(249, 29);
+            this.TextBoxPlaceOfBirth.TabIndex = 18;
+            this.TextBoxPlaceOfBirth.TextChanged += new System.EventHandler(this.TextBoxPlaceOfBith_TextChanged);
             // 
             // TextBoxYearOfDeath
             // 
-            this.TextBoxYearOfDeath.Location = new System.Drawing.Point(213, 647);
+            this.TextBoxYearOfDeath.Location = new System.Drawing.Point(156, 644);
             this.TextBoxYearOfDeath.Name = "TextBoxYearOfDeath";
             this.TextBoxYearOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfDeath.TabIndex = 21;
@@ -234,7 +236,7 @@ namespace FamilyTree
             // 
             // TextBoxFather
             // 
-            this.TextBoxFather.Location = new System.Drawing.Point(213, 612);
+            this.TextBoxFather.Location = new System.Drawing.Point(156, 609);
             this.TextBoxFather.Name = "TextBoxFather";
             this.TextBoxFather.Size = new System.Drawing.Size(249, 29);
             this.TextBoxFather.TabIndex = 20;
@@ -242,7 +244,7 @@ namespace FamilyTree
             // 
             // TextBoxMother
             // 
-            this.TextBoxMother.Location = new System.Drawing.Point(213, 577);
+            this.TextBoxMother.Location = new System.Drawing.Point(156, 574);
             this.TextBoxMother.Name = "TextBoxMother";
             this.TextBoxMother.Size = new System.Drawing.Size(249, 29);
             this.TextBoxMother.TabIndex = 19;
@@ -250,7 +252,7 @@ namespace FamilyTree
             // 
             // TextBoxPlaceOfDeath
             // 
-            this.TextBoxPlaceOfDeath.Location = new System.Drawing.Point(213, 682);
+            this.TextBoxPlaceOfDeath.Location = new System.Drawing.Point(156, 679);
             this.TextBoxPlaceOfDeath.Name = "TextBoxPlaceOfDeath";
             this.TextBoxPlaceOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfDeath.TabIndex = 22;
@@ -258,11 +260,11 @@ namespace FamilyTree
             // 
             // InsertButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(473, 682);
+            this.InsertButton.Location = new System.Drawing.Point(411, 679);
             this.InsertButton.Name = "InsertButton";
             this.InsertButton.Size = new System.Drawing.Size(76, 29);
             this.InsertButton.TabIndex = 23;
-            this.InsertButton.Text = "Insert";
+            this.InsertButton.Text = "Add";
             this.InsertButton.UseVisualStyleBackColor = true;
             this.InsertButton.Click += new System.EventHandler(this.InsertButton_Click);
             // 
@@ -270,9 +272,9 @@ namespace FamilyTree
             // 
             this.TreePNGBox.Image = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.Image")));
             this.TreePNGBox.InitialImage = ((System.Drawing.Image)(resources.GetObject("TreePNGBox.InitialImage")));
-            this.TreePNGBox.Location = new System.Drawing.Point(829, 411);
+            this.TreePNGBox.Location = new System.Drawing.Point(845, 411);
             this.TreePNGBox.Name = "TreePNGBox";
-            this.TreePNGBox.Size = new System.Drawing.Size(354, 320);
+            this.TreePNGBox.Size = new System.Drawing.Size(338, 320);
             this.TreePNGBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.TreePNGBox.TabIndex = 26;
             this.TreePNGBox.TabStop = false;
@@ -282,7 +284,7 @@ namespace FamilyTree
             this.FamilyTreeLogoLabel.AutoSize = true;
             this.FamilyTreeLogoLabel.Font = new System.Drawing.Font("NSimSun", 69F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FamilyTreeLogoLabel.ForeColor = System.Drawing.Color.Crimson;
-            this.FamilyTreeLogoLabel.Location = new System.Drawing.Point(504, 9);
+            this.FamilyTreeLogoLabel.Location = new System.Drawing.Point(641, 9);
             this.FamilyTreeLogoLabel.Name = "FamilyTreeLogoLabel";
             this.FamilyTreeLogoLabel.Size = new System.Drawing.Size(556, 92);
             this.FamilyTreeLogoLabel.TabIndex = 27;
@@ -406,7 +408,7 @@ namespace FamilyTree
             this.ListBoxMother.Font = new System.Drawing.Font("MS Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ListBoxMother.FormattingEnabled = true;
             this.ListBoxMother.ItemHeight = 19;
-            this.ListBoxMother.Location = new System.Drawing.Point(476, 137);
+            this.ListBoxMother.Location = new System.Drawing.Point(475, 137);
             this.ListBoxMother.Name = "ListBoxMother";
             this.ListBoxMother.Size = new System.Drawing.Size(253, 251);
             this.ListBoxMother.TabIndex = 37;
@@ -426,7 +428,7 @@ namespace FamilyTree
             this.SearchLabel.AutoSize = true;
             this.SearchLabel.Font = new System.Drawing.Font("NSimSun", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SearchLabel.ForeColor = System.Drawing.Color.Crimson;
-            this.SearchLabel.Location = new System.Drawing.Point(13, 11);
+            this.SearchLabel.Location = new System.Drawing.Point(9, 19);
             this.SearchLabel.Name = "SearchLabel";
             this.SearchLabel.Size = new System.Drawing.Size(82, 21);
             this.SearchLabel.TabIndex = 1;
@@ -435,9 +437,35 @@ namespace FamilyTree
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(590, 549);
+            this.monthCalendar1.Location = new System.Drawing.Point(606, 549);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 41;
+            // 
+            // NewDatabaseButton
+            // 
+            this.NewDatabaseButton.Location = new System.Drawing.Point(440, 49);
+            this.NewDatabaseButton.Name = "NewDatabaseButton";
+            this.NewDatabaseButton.Size = new System.Drawing.Size(143, 28);
+            this.NewDatabaseButton.TabIndex = 42;
+            this.NewDatabaseButton.Text = "New Database";
+            this.NewDatabaseButton.UseVisualStyleBackColor = true;
+            this.NewDatabaseButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // SearchMenu
+            // 
+            this.SearchMenu.BackColor = System.Drawing.Color.White;
+            this.SearchMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SearchMenu.FormattingEnabled = true;
+            this.SearchMenu.Items.AddRange(new object[] {
+            "Normal Search:",
+            "Find Siblings:",
+            "Find Parents:",
+            "Find Kids:"});
+            this.SearchMenu.Location = new System.Drawing.Point(167, 9);
+            this.SearchMenu.Name = "SearchMenu";
+            this.SearchMenu.Size = new System.Drawing.Size(192, 32);
+            this.SearchMenu.TabIndex = 44;
+            this.SearchMenu.SelectedIndexChanged += new System.EventHandler(this.SearchMenu_SelectedIndexChanged);
             // 
             // Dashboard
             // 
@@ -445,6 +473,8 @@ namespace FamilyTree
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1209, 753);
+            this.Controls.Add(this.SearchMenu);
+            this.Controls.Add(this.NewDatabaseButton);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.ListBoxPOD);
             this.Controls.Add(this.ListBoxYOD);
@@ -466,7 +496,7 @@ namespace FamilyTree
             this.Controls.Add(this.TextBoxYearOfDeath);
             this.Controls.Add(this.TextBoxFather);
             this.Controls.Add(this.TextBoxMother);
-            this.Controls.Add(this.TextBoxPlaceOfBith);
+            this.Controls.Add(this.TextBoxPlaceOfBirth);
             this.Controls.Add(this.TextBoxYearOfBirth);
             this.Controls.Add(this.TextBoxName);
             this.Controls.Add(this.PlaceOfDeathInsLabel);
@@ -510,7 +540,7 @@ namespace FamilyTree
         private System.Windows.Forms.Label PlaceOfDeathInsLabel;
         private System.Windows.Forms.TextBox TextBoxName;
         private System.Windows.Forms.TextBox TextBoxYearOfBirth;
-        private System.Windows.Forms.TextBox TextBoxPlaceOfBith;
+        private System.Windows.Forms.TextBox TextBoxPlaceOfBirth;
         private System.Windows.Forms.TextBox TextBoxYearOfDeath;
         private System.Windows.Forms.TextBox TextBoxFather;
         private System.Windows.Forms.TextBox TextBoxMother;
@@ -533,6 +563,8 @@ namespace FamilyTree
         private System.Windows.Forms.ListBox ListBoxPOD;
         private System.Windows.Forms.Label SearchLabel;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
+        private System.Windows.Forms.Button NewDatabaseButton;
+        private System.Windows.Forms.ComboBox SearchMenu;
     }
 }
 
