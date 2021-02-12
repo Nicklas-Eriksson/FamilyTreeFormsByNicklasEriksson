@@ -23,12 +23,16 @@ namespace FamilyTree
             InitializeComponent();
             var db = new DataAccess();
             UpdateScrollListMembers(db);
-            //AddMockData();
+            //var Add = new MockData();
+            //Add.Data();
         }
+
+        
 
         private void UpdateScrollListMembers(DataAccess db)
         {
             people.Clear();
+            MemberList_ComboBox.Items.Clear();
             people = db.GetAll();
             foreach (var person in people)
             {
@@ -57,7 +61,7 @@ namespace FamilyTree
             {
                 for (int i = 0; i < people.Count; i++)
                 {
-                    if (MemberList_ComboBox.SelectedIndex.ToString() == people[i].FullName)
+                    if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
                     {
                         DataAccess.Delete(people[i]);
                         break;
@@ -271,7 +275,7 @@ namespace FamilyTree
 
             var db = new DataAccess();
             insertedList = db.GetRelativesByName(SearchText.Text, relative);
-            people = db.GetAll(/*SearchText.Text*/); //Populate the list if user only preforms multiple find sibling searches
+            people = db.GetAll(); //Populate the list if user only preforms multiple find sibling searches
 
             FoundSearchedPerson();
             GetMotherAndFatherNameFromID(people);
@@ -279,6 +283,13 @@ namespace FamilyTree
             GetInfo(insertedList);
         }
 
+        private void ResetDB_Button_Click(object sender, EventArgs e)
+        {
+
+            var MD = new MockData();
+            MD.DeleteData();
+            MD.InsertData();
+        }
 
         //Cant delete these.. Will throw error
         private void Dashboard_Load(object sender, EventArgs e) { }
@@ -315,5 +326,7 @@ namespace FamilyTree
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
         private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
         private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
+
+        
     }
 }

@@ -66,11 +66,12 @@ namespace FamilyTree
             this.ListBoxPOD = new System.Windows.Forms.ListBox();
             this.SearchLabel = new System.Windows.Forms.Label();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
-            this.NewDatabaseButton = new System.Windows.Forms.Button();
+            this.NewDB_Button = new System.Windows.Forms.Button();
             this.SearchMenu = new System.Windows.Forms.ComboBox();
             this.AddUpdateDelete_ComboBox = new System.Windows.Forms.ComboBox();
             this.MemberList_ComboBox = new System.Windows.Forms.ComboBox();
             this.AddUpdateDelete_Text = new System.Windows.Forms.Label();
+            this.ResetDB_Button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -430,15 +431,15 @@ namespace FamilyTree
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 41;
             // 
-            // NewDatabaseButton
+            // NewDB_Button
             // 
-            this.NewDatabaseButton.Location = new System.Drawing.Point(440, 49);
-            this.NewDatabaseButton.Name = "NewDatabaseButton";
-            this.NewDatabaseButton.Size = new System.Drawing.Size(143, 28);
-            this.NewDatabaseButton.TabIndex = 42;
-            this.NewDatabaseButton.Text = "New Database";
-            this.NewDatabaseButton.UseVisualStyleBackColor = true;
-            this.NewDatabaseButton.Click += new System.EventHandler(this.button1_Click);
+            this.NewDB_Button.Location = new System.Drawing.Point(440, 13);
+            this.NewDB_Button.Name = "NewDB_Button";
+            this.NewDB_Button.Size = new System.Drawing.Size(167, 28);
+            this.NewDB_Button.TabIndex = 42;
+            this.NewDB_Button.Text = "New Database";
+            this.NewDB_Button.UseVisualStyleBackColor = true;
+            this.NewDB_Button.Click += new System.EventHandler(this.button1_Click);
             // 
             // SearchMenu
             // 
@@ -494,17 +495,28 @@ namespace FamilyTree
             this.AddUpdateDelete_Text.Text = "Add-/Update-/Delete";
             this.AddUpdateDelete_Text.Click += new System.EventHandler(this.AddUpdateDelete_Text_Click);
             // 
+            // ResetDB_Button
+            // 
+            this.ResetDB_Button.Location = new System.Drawing.Point(440, 47);
+            this.ResetDB_Button.Name = "ResetDB_Button";
+            this.ResetDB_Button.Size = new System.Drawing.Size(167, 28);
+            this.ResetDB_Button.TabIndex = 48;
+            this.ResetDB_Button.Text = "Restore Database";
+            this.ResetDB_Button.UseVisualStyleBackColor = true;
+            this.ResetDB_Button.Click += new System.EventHandler(this.ResetDB_Button_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1209, 753);
+            this.Controls.Add(this.ResetDB_Button);
             this.Controls.Add(this.AddUpdateDelete_Text);
             this.Controls.Add(this.MemberList_ComboBox);
             this.Controls.Add(this.AddUpdateDelete_ComboBox);
             this.Controls.Add(this.SearchMenu);
-            this.Controls.Add(this.NewDatabaseButton);
+            this.Controls.Add(this.NewDB_Button);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.ListBoxPOD);
             this.Controls.Add(this.ListBoxYOD);
@@ -591,11 +603,12 @@ namespace FamilyTree
         private System.Windows.Forms.ListBox ListBoxPOD;
         private System.Windows.Forms.Label SearchLabel;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
-        private System.Windows.Forms.Button NewDatabaseButton;
+        private System.Windows.Forms.Button NewDB_Button;
         private System.Windows.Forms.ComboBox SearchMenu;
         private System.Windows.Forms.ComboBox AddUpdateDelete_ComboBox;
         private System.Windows.Forms.ComboBox MemberList_ComboBox;
         private System.Windows.Forms.Label AddUpdateDelete_Text;
+        private System.Windows.Forms.Button ResetDB_Button;
     }
 }
 

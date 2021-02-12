@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FamilyTree
 {
-    public class SearchMenuComboBox
-    {
-        public int Id { get; set; }
-        public string Text { get; set; }
-    }
+    //public class SearchMenuComboBox
+    //{
+    //    public int Id { get; set; }
+    //    public string Text { get; set; }
+    //}
 }

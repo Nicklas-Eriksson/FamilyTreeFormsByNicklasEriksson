@@ -26,26 +26,43 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                var _name = new DynamicParameters(new Person { FullName = name });
+                var DynamicObject = new DynamicParameters(new Person { FullName = name });
                 List<Person> fullList = new List<Person>();
 
                 if (relative == "siblings")
                 {
-                    fullList = connection.Query<Person>("dbo.People_FindSiblings @fullName", _name).ToList();
+                    fullList = connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
                 }
-                else if(relative == "parents")
+                else if (relative == "parents")
                 {
-                    fullList = connection.Query<Person>("dbo.People_FindParents @fullName", _name).ToList();
+                    fullList = connection.Query<Person>("dbo.People_FindParents @fullName", DynamicObject).ToList();
                 }
                 else if (relative == "kids")
                 {
-                    fullList = connection.Query<Person>("dbo.People_FindKids @fullName", _name).ToList();
-                }
-                else
-                {
-                    //Potential error handling here
+                    fullList = connection.Query<Person>("dbo.People_FindKids @fullName", DynamicObject).ToList();
                 }
                 return fullList;
+            }
+        }
+
+        internal List<Person> SQLQuery(string[] SQLQueryInput)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                var fullList = connection.Query<Person>("dbo.People_InsertMockData").ToList();
+
+                return fullList;
+                //foreach (var person in SQLQueryInput)
+                //{
+                //    connection.Query<Person>(person);
+                //}
+            }
+        }
+        internal void SQLQuery(string SQLQueryInput)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Query<Person>(SQLQueryInput);
             }
         }
 
@@ -117,15 +134,13 @@ namespace FamilyTree
             }
         }
 
-        internal static List<Person> Delete(Person person)
+        internal static void Delete(Person person)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {                
-                var fullList = connection.Query<Person>
-                    ($@"DELETE FROM People                      
-                     WHERE fullName = {person}; ").ToList();
-                return fullList;
-            }            
+            {
+                var DynamicObject = new DynamicParameters(person);
+                connection.Query<Person>(@"dbo.People_Delete @fullName", DynamicObject);
+            }
         }
 
         private static int FindFatherId(string _fatherName, int dadId, List<Person> populatedList)
