@@ -15,11 +15,25 @@ namespace FamilyTree
         public List<Person> people = new List<Person>();
         private List<Person> foundPerson = new List<Person>();
         private List<Person> siblings = new List<Person>();
+        private List<Person> parents = new List<Person>();
+        private List<Person> kids = new List<Person>();
 
         public Dashboard()
         {
             InitializeComponent();
-            GetInfo(people);
+            var db = new DataAccess();
+            UpdateScrollListMembers(db);
+            //AddMockData();
+        }
+
+        private void UpdateScrollListMembers(DataAccess db)
+        {
+            people.Clear();
+            people = db.GetAll();
+            foreach (var person in people)
+            {
+                MemberList_ComboBox.Items.Add(person.FullName);
+            }
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
@@ -30,7 +44,27 @@ namespace FamilyTree
         private void InsertButton_Click(object sender, EventArgs e)
         {
             DataAccess db = new DataAccess();
-            db.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+
+            if (AddUpdateDelete_ComboBox.SelectedIndex == 0) //Add
+            {
+                db.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+            }
+            else if (AddUpdateDelete_ComboBox.SelectedIndex == 1) //Update
+            {
+
+            }
+            else if (AddUpdateDelete_ComboBox.SelectedIndex == 2) //Delete
+            {
+                for (int i = 0; i < people.Count; i++)
+                {
+                    if (MemberList_ComboBox.SelectedIndex.ToString() == people[i].FullName)
+                    {
+                        DataAccess.Delete(people[i]);
+                        break;
+                    }
+                }
+                UpdateScrollListMembers(db);
+            }
         }
 
         private void FoundSearchedPerson()
@@ -65,14 +99,15 @@ namespace FamilyTree
                 }
             }
         }
-        private void GetParentNamesForSiblings(List<Person> insertedList)
+
+        private void GetParentNamesForRelatives(List<Person> insertedList)
         {
             for (int i = 0; i < insertedList.Count; i++) //Search full DB for a match
             {
                 for (int j = 0; j < people.Count; j++)
                 {
                     //If siblings motherId == peopleId > set that siblings mother name to that iterations name
-                    if (people[j].Id == insertedList[i].MotherId) 
+                    if (people[j].Id == insertedList[i].MotherId)
                     {
                         insertedList[i].MotherName = people[j].FullName;
                     }
@@ -135,60 +170,115 @@ namespace FamilyTree
         }
 
         private void TypeOfSearch()
-        {            
+        {
             if (SearchMenu.SelectedIndex == 0) //Normal Search:
             {
                 NormalSearch();
             }
-            else if (SearchMenu.SelectedIndex == 1)//Find Siblings:
+            else if (SearchMenu.SelectedIndex == 1)//Find All:
             {
-                FindSiblings();
+                FindAll();
             }
-            else if (SearchMenu.SelectedIndex == 2)//Find Parents:
+            else if (SearchMenu.SelectedIndex == 2)//Find Siblings:
             {
-                FindParents();
+                FindRelatives(siblings, "siblings");
             }
-            else //Find Kids
+            else if (SearchMenu.SelectedIndex == 3) //Find Kids
             {
                 FindKids();
             }
+            else if (SearchMenu.SelectedIndex == 4)//Find Parents
+            {
+                FindParents();
+            }
         }
+
         private void NormalSearch()
         {
-            if (SearchMenu.SelectedIndex == 0)
-            {
-                var db = new DataAccess();
-                people = db.GetByName(/*SearchText.Text*/); //SearchText refers to the search bar
+            var db = new DataAccess();
+            people = db.GetAll(/*SearchText.Text*/); //SearchText refers to the search bar
 
-                FoundSearchedPerson();
-                GetMotherAndFatherNameFromID(people);
-                GetInfo(foundPerson);
-            }
+            FoundSearchedPerson();
+            GetMotherAndFatherNameFromID(people);
+            GetInfo(foundPerson);
         }
-        private void FindSiblings()
+        private void FindAll()
         {
-            if (SearchMenu.SelectedIndex == 1)
+            var db = new DataAccess();
+            people.Clear();
+            MemberList_ComboBox.Items.Clear();
+            people = db.GetAll();
+
+            foreach (var person in people)
             {
-                people.Clear();//Clears the list if user only preforms multiple find sibling searches
-
-                var db = new DataAccess();
-                siblings = db.GetSibblingsByName(SearchText.Text);
-                people = db.GetByName(/*SearchText.Text*/); //Populate the list if user only preforms multiple find sibling searches
-
-                FoundSearchedPerson();
-                GetMotherAndFatherNameFromID(people);
-                GetParentNamesForSiblings(siblings);
-                GetInfo(siblings);
+                MemberList_ComboBox.Items.Add(person.FullName);
             }
-        }
-        private void FindParents()
-        {
 
+            GetMotherAndFatherNameFromID(people);
+            GetInfo(people);
         }
         private void FindKids()
         {
+            kids.Clear();
+            var db = new DataAccess();
+            people = db.GetAll();//Populates with every1 in sql
+            FoundSearchedPerson(); //Populates the foundPersonList with the person from search
 
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (people[i].MotherId == foundPerson[0].Id)
+                {
+                    kids.Add(people[i]);
+                }
+                else if (people[i].FatherId == foundPerson[0].Id)
+                {
+                    kids.Add(people[i]);
+                }
+            }
+
+            GetMotherAndFatherNameFromID(people);
+            GetInfo(kids);
+
+            //FindRelatives(kids, "kids");
         }
+        private void FindParents()
+        {
+            parents.Clear();
+            var db = new DataAccess();
+            people = db.GetAll();//Populates with every1 in sql
+            FoundSearchedPerson(); //Populates the foundPersonList with the person from search
+
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (foundPerson[0].MotherId == people[i].Id)
+                {
+                    parents.Add(people[i]);
+                }
+                else if (foundPerson[0].FatherId == people[i].Id)
+                {
+                    parents.Add(people[i]);
+                }
+            }
+
+            GetMotherAndFatherNameFromID(people);
+            GetInfo(parents);
+        }
+
+        //Edit
+        private void FindRelatives(List<Person> insertedList, string relative)
+        {
+            people.Clear();//Clears the list if user only preforms multiple find sibling searches
+
+            var db = new DataAccess();
+            insertedList = db.GetRelativesByName(SearchText.Text, relative);
+            people = db.GetAll(/*SearchText.Text*/); //Populate the list if user only preforms multiple find sibling searches
+
+            FoundSearchedPerson();
+            GetMotherAndFatherNameFromID(people);
+            GetParentNamesForRelatives(insertedList);//RENAME
+            GetInfo(insertedList);
+        }
+
 
         //Cant delete these.. Will throw error
         private void Dashboard_Load(object sender, EventArgs e) { }
@@ -223,5 +313,7 @@ namespace FamilyTree
         private void button1_Click(object sender, EventArgs e) { }
         private void SearchMenu_SelectedIndexChanged(object sender, EventArgs e) { }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
+        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
     }
 }

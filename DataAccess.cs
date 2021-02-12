@@ -8,9 +8,9 @@ namespace FamilyTree
 {
     public class DataAccess
     {
-        public List<Person> GetByName()
+        internal List<Person> GetAll()
         {
-            //Reference to Dapper, via nugget           
+            //Reference to Dapper, via nugget   
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 //This one is prone to SQL injection
@@ -22,19 +22,34 @@ namespace FamilyTree
             }
         }
 
-        public List<Person> GetSibblingsByName(string name)
+        internal List<Person> GetRelativesByName(string name, string relative)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                var _name = new DynamicParameters(new Person { FullName = name});
+                var _name = new DynamicParameters(new Person { FullName = name });
+                List<Person> fullList = new List<Person>();
 
-                var fullList = connection.Query<Person>("dbo.People_FindSiblings @fullName", _name).ToList();
-                
+                if (relative == "siblings")
+                {
+                    fullList = connection.Query<Person>("dbo.People_FindSiblings @fullName", _name).ToList();
+                }
+                else if(relative == "parents")
+                {
+                    fullList = connection.Query<Person>("dbo.People_FindParents @fullName", _name).ToList();
+                }
+                else if (relative == "kids")
+                {
+                    fullList = connection.Query<Person>("dbo.People_FindKids @fullName", _name).ToList();
+                }
+                else
+                {
+                    //Potential error handling here
+                }
                 return fullList;
             }
         }
 
-        public void AddNewPerson(string _fullName, string _yearOfBirth, string _birthPlace, string _motherName, string _fatherName, string _yearOfDeath, string _placeOfDeath)
+        internal void AddNewPerson(string _fullName, string _yearOfBirth, string _birthPlace, string _motherName, string _fatherName, string _yearOfDeath, string _placeOfDeath)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
@@ -102,6 +117,17 @@ namespace FamilyTree
             }
         }
 
+        internal static List<Person> Delete(Person person)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {                
+                var fullList = connection.Query<Person>
+                    ($@"DELETE FROM People                      
+                     WHERE fullName = {person}; ").ToList();
+                return fullList;
+            }            
+        }
+
         private static int FindFatherId(string _fatherName, int dadId, List<Person> populatedList)
         {
             for (int i = 0; i < populatedList.Count; i++)
@@ -115,7 +141,9 @@ namespace FamilyTree
             return dadId;
         }
 
-        private static int FindMotherId(string _motherName, int momId, List<Person> populatedList)
+
+
+        internal static int FindMotherId(string _motherName, int momId, List<Person> populatedList)
         {
             for (int i = 0; i < populatedList.Count; i++)
             {
@@ -128,6 +156,6 @@ namespace FamilyTree
             return momId;
         }
 
-       
+
     }
 }

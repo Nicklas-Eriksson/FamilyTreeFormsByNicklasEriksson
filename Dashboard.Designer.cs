@@ -34,7 +34,6 @@ namespace FamilyTree
             this.SearchText = new System.Windows.Forms.TextBox();
             this.SearchButton = new System.Windows.Forms.Button();
             this.DisplayNameLabel = new System.Windows.Forms.Label();
-            this.AddNewMemberLabel = new System.Windows.Forms.Label();
             this.NameInsLabel = new System.Windows.Forms.Label();
             this.YearOfBirthInsLabel = new System.Windows.Forms.Label();
             this.PlaceOfBirthInsLabel = new System.Windows.Forms.Label();
@@ -49,7 +48,7 @@ namespace FamilyTree
             this.TextBoxFather = new System.Windows.Forms.TextBox();
             this.TextBoxMother = new System.Windows.Forms.TextBox();
             this.TextBoxPlaceOfDeath = new System.Windows.Forms.TextBox();
-            this.InsertButton = new System.Windows.Forms.Button();
+            this.OkButton = new System.Windows.Forms.Button();
             this.TreePNGBox = new System.Windows.Forms.PictureBox();
             this.FamilyTreeLogoLabel = new System.Windows.Forms.Label();
             this.DisplayYearOfBirthLabel = new System.Windows.Forms.Label();
@@ -69,6 +68,9 @@ namespace FamilyTree
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.NewDatabaseButton = new System.Windows.Forms.Button();
             this.SearchMenu = new System.Windows.Forms.ComboBox();
+            this.AddUpdateDelete_ComboBox = new System.Windows.Forms.ComboBox();
+            this.MemberList_ComboBox = new System.Windows.Forms.ComboBox();
+            this.AddUpdateDelete_Text = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -112,24 +114,11 @@ namespace FamilyTree
             this.DisplayNameLabel.Text = "Name";
             this.DisplayNameLabel.Click += new System.EventHandler(this.DisplayNameLabel_Click);
             // 
-            // AddNewMemberLabel
-            // 
-            this.AddNewMemberLabel.AutoSize = true;
-            this.AddNewMemberLabel.BackColor = System.Drawing.Color.Transparent;
-            this.AddNewMemberLabel.Font = new System.Drawing.Font("NSimSun", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddNewMemberLabel.ForeColor = System.Drawing.Color.Crimson;
-            this.AddNewMemberLabel.Location = new System.Drawing.Point(10, 428);
-            this.AddNewMemberLabel.Name = "AddNewMemberLabel";
-            this.AddNewMemberLabel.Size = new System.Drawing.Size(372, 33);
-            this.AddNewMemberLabel.TabIndex = 8;
-            this.AddNewMemberLabel.Text = "Add new family member";
-            this.AddNewMemberLabel.Click += new System.EventHandler(this.AddNewFamilyMemberLabel_Click);
-            // 
             // NameInsLabel
             // 
             this.NameInsLabel.AutoSize = true;
             this.NameInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.NameInsLabel.Location = new System.Drawing.Point(15, 473);
+            this.NameInsLabel.Location = new System.Drawing.Point(15, 496);
             this.NameInsLabel.Name = "NameInsLabel";
             this.NameInsLabel.Size = new System.Drawing.Size(61, 24);
             this.NameInsLabel.TabIndex = 9;
@@ -140,7 +129,7 @@ namespace FamilyTree
             // 
             this.YearOfBirthInsLabel.AutoSize = true;
             this.YearOfBirthInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.YearOfBirthInsLabel.Location = new System.Drawing.Point(15, 508);
+            this.YearOfBirthInsLabel.Location = new System.Drawing.Point(15, 531);
             this.YearOfBirthInsLabel.Name = "YearOfBirthInsLabel";
             this.YearOfBirthInsLabel.Size = new System.Drawing.Size(110, 24);
             this.YearOfBirthInsLabel.TabIndex = 10;
@@ -151,7 +140,7 @@ namespace FamilyTree
             // 
             this.PlaceOfBirthInsLabel.AutoSize = true;
             this.PlaceOfBirthInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.PlaceOfBirthInsLabel.Location = new System.Drawing.Point(15, 543);
+            this.PlaceOfBirthInsLabel.Location = new System.Drawing.Point(15, 566);
             this.PlaceOfBirthInsLabel.Name = "PlaceOfBirthInsLabel";
             this.PlaceOfBirthInsLabel.Size = new System.Drawing.Size(118, 24);
             this.PlaceOfBirthInsLabel.TabIndex = 11;
@@ -162,7 +151,7 @@ namespace FamilyTree
             // 
             this.MotherInsLabel.AutoSize = true;
             this.MotherInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.MotherInsLabel.Location = new System.Drawing.Point(15, 577);
+            this.MotherInsLabel.Location = new System.Drawing.Point(15, 600);
             this.MotherInsLabel.Name = "MotherInsLabel";
             this.MotherInsLabel.Size = new System.Drawing.Size(69, 24);
             this.MotherInsLabel.TabIndex = 12;
@@ -173,7 +162,7 @@ namespace FamilyTree
             // 
             this.FatherInsLabel.AutoSize = true;
             this.FatherInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.FatherInsLabel.Location = new System.Drawing.Point(15, 612);
+            this.FatherInsLabel.Location = new System.Drawing.Point(15, 635);
             this.FatherInsLabel.Name = "FatherInsLabel";
             this.FatherInsLabel.Size = new System.Drawing.Size(64, 24);
             this.FatherInsLabel.TabIndex = 13;
@@ -184,7 +173,7 @@ namespace FamilyTree
             // 
             this.YearOfDeathInsLabel.AutoSize = true;
             this.YearOfDeathInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.YearOfDeathInsLabel.Location = new System.Drawing.Point(14, 647);
+            this.YearOfDeathInsLabel.Location = new System.Drawing.Point(14, 670);
             this.YearOfDeathInsLabel.Name = "YearOfDeathInsLabel";
             this.YearOfDeathInsLabel.Size = new System.Drawing.Size(121, 24);
             this.YearOfDeathInsLabel.TabIndex = 14;
@@ -195,7 +184,7 @@ namespace FamilyTree
             // 
             this.PlaceOfDeathInsLabel.AutoSize = true;
             this.PlaceOfDeathInsLabel.ForeColor = System.Drawing.Color.Fuchsia;
-            this.PlaceOfDeathInsLabel.Location = new System.Drawing.Point(15, 682);
+            this.PlaceOfDeathInsLabel.Location = new System.Drawing.Point(15, 705);
             this.PlaceOfDeathInsLabel.Name = "PlaceOfDeathInsLabel";
             this.PlaceOfDeathInsLabel.Size = new System.Drawing.Size(129, 24);
             this.PlaceOfDeathInsLabel.TabIndex = 15;
@@ -204,7 +193,7 @@ namespace FamilyTree
             // 
             // TextBoxName
             // 
-            this.TextBoxName.Location = new System.Drawing.Point(156, 470);
+            this.TextBoxName.Location = new System.Drawing.Point(156, 493);
             this.TextBoxName.Name = "TextBoxName";
             this.TextBoxName.Size = new System.Drawing.Size(249, 29);
             this.TextBoxName.TabIndex = 16;
@@ -212,7 +201,7 @@ namespace FamilyTree
             // 
             // TextBoxYearOfBirth
             // 
-            this.TextBoxYearOfBirth.Location = new System.Drawing.Point(156, 505);
+            this.TextBoxYearOfBirth.Location = new System.Drawing.Point(156, 528);
             this.TextBoxYearOfBirth.Name = "TextBoxYearOfBirth";
             this.TextBoxYearOfBirth.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfBirth.TabIndex = 17;
@@ -220,7 +209,7 @@ namespace FamilyTree
             // 
             // TextBoxPlaceOfBirth
             // 
-            this.TextBoxPlaceOfBirth.Location = new System.Drawing.Point(156, 540);
+            this.TextBoxPlaceOfBirth.Location = new System.Drawing.Point(156, 563);
             this.TextBoxPlaceOfBirth.Name = "TextBoxPlaceOfBirth";
             this.TextBoxPlaceOfBirth.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfBirth.TabIndex = 18;
@@ -228,7 +217,7 @@ namespace FamilyTree
             // 
             // TextBoxYearOfDeath
             // 
-            this.TextBoxYearOfDeath.Location = new System.Drawing.Point(156, 644);
+            this.TextBoxYearOfDeath.Location = new System.Drawing.Point(156, 667);
             this.TextBoxYearOfDeath.Name = "TextBoxYearOfDeath";
             this.TextBoxYearOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfDeath.TabIndex = 21;
@@ -236,7 +225,7 @@ namespace FamilyTree
             // 
             // TextBoxFather
             // 
-            this.TextBoxFather.Location = new System.Drawing.Point(156, 609);
+            this.TextBoxFather.Location = new System.Drawing.Point(156, 632);
             this.TextBoxFather.Name = "TextBoxFather";
             this.TextBoxFather.Size = new System.Drawing.Size(249, 29);
             this.TextBoxFather.TabIndex = 20;
@@ -244,7 +233,7 @@ namespace FamilyTree
             // 
             // TextBoxMother
             // 
-            this.TextBoxMother.Location = new System.Drawing.Point(156, 574);
+            this.TextBoxMother.Location = new System.Drawing.Point(156, 597);
             this.TextBoxMother.Name = "TextBoxMother";
             this.TextBoxMother.Size = new System.Drawing.Size(249, 29);
             this.TextBoxMother.TabIndex = 19;
@@ -252,21 +241,21 @@ namespace FamilyTree
             // 
             // TextBoxPlaceOfDeath
             // 
-            this.TextBoxPlaceOfDeath.Location = new System.Drawing.Point(156, 679);
+            this.TextBoxPlaceOfDeath.Location = new System.Drawing.Point(156, 702);
             this.TextBoxPlaceOfDeath.Name = "TextBoxPlaceOfDeath";
             this.TextBoxPlaceOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfDeath.TabIndex = 22;
             this.TextBoxPlaceOfDeath.TextChanged += new System.EventHandler(this.TextBoxPlaceOfDeath_TextChanged);
             // 
-            // InsertButton
+            // OkButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(411, 679);
-            this.InsertButton.Name = "InsertButton";
-            this.InsertButton.Size = new System.Drawing.Size(76, 29);
-            this.InsertButton.TabIndex = 23;
-            this.InsertButton.Text = "Add";
-            this.InsertButton.UseVisualStyleBackColor = true;
-            this.InsertButton.Click += new System.EventHandler(this.InsertButton_Click);
+            this.OkButton.Location = new System.Drawing.Point(411, 703);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(72, 29);
+            this.OkButton.TabIndex = 23;
+            this.OkButton.Text = "Ok";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.InsertButton_Click);
             // 
             // TreePNGBox
             // 
@@ -437,7 +426,7 @@ namespace FamilyTree
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(606, 549);
+            this.monthCalendar1.Location = new System.Drawing.Point(606, 569);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 41;
             // 
@@ -458,14 +447,52 @@ namespace FamilyTree
             this.SearchMenu.FormattingEnabled = true;
             this.SearchMenu.Items.AddRange(new object[] {
             "Normal Search:",
+            "Find All:",
             "Find Siblings:",
-            "Find Parents:",
-            "Find Kids:"});
+            "Find Kids:",
+            "Find Parents"});
             this.SearchMenu.Location = new System.Drawing.Point(167, 9);
             this.SearchMenu.Name = "SearchMenu";
             this.SearchMenu.Size = new System.Drawing.Size(192, 32);
             this.SearchMenu.TabIndex = 44;
             this.SearchMenu.SelectedIndexChanged += new System.EventHandler(this.SearchMenu_SelectedIndexChanged);
+            // 
+            // AddUpdateDelete_ComboBox
+            // 
+            this.AddUpdateDelete_ComboBox.BackColor = System.Drawing.Color.White;
+            this.AddUpdateDelete_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AddUpdateDelete_ComboBox.FormattingEnabled = true;
+            this.AddUpdateDelete_ComboBox.Items.AddRange(new object[] {
+            "Add:",
+            "Update:",
+            "Delete:"});
+            this.AddUpdateDelete_ComboBox.Location = new System.Drawing.Point(334, 417);
+            this.AddUpdateDelete_ComboBox.Name = "AddUpdateDelete_ComboBox";
+            this.AddUpdateDelete_ComboBox.Size = new System.Drawing.Size(106, 32);
+            this.AddUpdateDelete_ComboBox.TabIndex = 45;
+            // 
+            // MemberList_ComboBox
+            // 
+            this.MemberList_ComboBox.BackColor = System.Drawing.Color.White;
+            this.MemberList_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MemberList_ComboBox.FormattingEnabled = true;
+            this.MemberList_ComboBox.Location = new System.Drawing.Point(334, 455);
+            this.MemberList_ComboBox.Name = "MemberList_ComboBox";
+            this.MemberList_ComboBox.Size = new System.Drawing.Size(249, 32);
+            this.MemberList_ComboBox.TabIndex = 46;
+            this.MemberList_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MemberList_ComboBox_SelectedIndexChanged);
+            // 
+            // AddUpdateDelete_Text
+            // 
+            this.AddUpdateDelete_Text.AutoSize = true;
+            this.AddUpdateDelete_Text.Font = new System.Drawing.Font("SimSun", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddUpdateDelete_Text.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.AddUpdateDelete_Text.Location = new System.Drawing.Point(7, 434);
+            this.AddUpdateDelete_Text.Name = "AddUpdateDelete_Text";
+            this.AddUpdateDelete_Text.Size = new System.Drawing.Size(317, 29);
+            this.AddUpdateDelete_Text.TabIndex = 47;
+            this.AddUpdateDelete_Text.Text = "Add-/Update-/Delete";
+            this.AddUpdateDelete_Text.Click += new System.EventHandler(this.AddUpdateDelete_Text_Click);
             // 
             // Dashboard
             // 
@@ -473,6 +500,9 @@ namespace FamilyTree
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1209, 753);
+            this.Controls.Add(this.AddUpdateDelete_Text);
+            this.Controls.Add(this.MemberList_ComboBox);
+            this.Controls.Add(this.AddUpdateDelete_ComboBox);
             this.Controls.Add(this.SearchMenu);
             this.Controls.Add(this.NewDatabaseButton);
             this.Controls.Add(this.monthCalendar1);
@@ -491,7 +521,7 @@ namespace FamilyTree
             this.Controls.Add(this.DisplayYearOfBirthLabel);
             this.Controls.Add(this.FamilyTreeLogoLabel);
             this.Controls.Add(this.TreePNGBox);
-            this.Controls.Add(this.InsertButton);
+            this.Controls.Add(this.OkButton);
             this.Controls.Add(this.TextBoxPlaceOfDeath);
             this.Controls.Add(this.TextBoxYearOfDeath);
             this.Controls.Add(this.TextBoxFather);
@@ -506,7 +536,6 @@ namespace FamilyTree
             this.Controls.Add(this.PlaceOfBirthInsLabel);
             this.Controls.Add(this.YearOfBirthInsLabel);
             this.Controls.Add(this.NameInsLabel);
-            this.Controls.Add(this.AddNewMemberLabel);
             this.Controls.Add(this.DisplayNameLabel);
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.SearchText);
@@ -530,7 +559,6 @@ namespace FamilyTree
         private System.Windows.Forms.TextBox SearchText;
         private System.Windows.Forms.Button SearchButton;
         private System.Windows.Forms.Label DisplayNameLabel;
-        private System.Windows.Forms.Label AddNewMemberLabel;
         private System.Windows.Forms.Label NameInsLabel;
         private System.Windows.Forms.Label YearOfBirthInsLabel;
         private System.Windows.Forms.Label PlaceOfBirthInsLabel;
@@ -545,7 +573,7 @@ namespace FamilyTree
         private System.Windows.Forms.TextBox TextBoxFather;
         private System.Windows.Forms.TextBox TextBoxMother;
         private System.Windows.Forms.TextBox TextBoxPlaceOfDeath;
-        private System.Windows.Forms.Button InsertButton;
+        private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.PictureBox TreePNGBox;
         private System.Windows.Forms.Label FamilyTreeLogoLabel;
         private System.Windows.Forms.Label DisplayYearOfBirthLabel;
@@ -565,6 +593,9 @@ namespace FamilyTree
         private System.Windows.Forms.MonthCalendar monthCalendar1;
         private System.Windows.Forms.Button NewDatabaseButton;
         private System.Windows.Forms.ComboBox SearchMenu;
+        private System.Windows.Forms.ComboBox AddUpdateDelete_ComboBox;
+        private System.Windows.Forms.ComboBox MemberList_ComboBox;
+        private System.Windows.Forms.Label AddUpdateDelete_Text;
     }
 }
 
