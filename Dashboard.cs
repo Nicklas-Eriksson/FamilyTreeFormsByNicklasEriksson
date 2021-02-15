@@ -23,11 +23,9 @@ namespace FamilyTree
             InitializeComponent();
             var db = new DataAccess();
             UpdateScrollListMembers(db);
-            //var Add = new MockData();
-            //Add.Data();
-        }
-
-        
+            //var MD = new MockData();
+            //MD.ResetData(people);
+        }        
 
         private void UpdateScrollListMembers(DataAccess db)
         {
@@ -83,7 +81,7 @@ namespace FamilyTree
             }
         }
 
-        private void GetMotherAndFatherNameFromID(List<Person> insertedList)
+        public void GetMotherAndFatherNameFromID(List<Person> insertedList)
         {
             for (int i = 0; i < insertedList.Count; i++)
             {
@@ -284,11 +282,10 @@ namespace FamilyTree
         }
 
         private void ResetDB_Button_Click(object sender, EventArgs e)
-        {
-
-            var MD = new MockData();
-            MD.DeleteData();
-            MD.InsertData();
+        {            
+            var MD = new MockData();            
+            MD.ResetData(people);            
+            GetParentNamesForRelatives(people);
         }
 
         //Cant delete these.. Will throw error
@@ -325,8 +322,6 @@ namespace FamilyTree
         private void SearchMenu_SelectedIndexChanged(object sender, EventArgs e) { }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
         private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
-        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
-
-        
+        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }        
     }
 }

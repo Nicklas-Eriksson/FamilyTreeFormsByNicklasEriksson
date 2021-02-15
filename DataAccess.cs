@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using System.Data;
+using System.Threading;
 
 namespace FamilyTree
 {
@@ -45,24 +46,33 @@ namespace FamilyTree
             }
         }
 
-        internal List<Person> SQLQuery(string[] SQLQueryInput)
+        internal List<Person> AddMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                var fullList = connection.Query<Person>("dbo.People_InsertMockData").ToList();
-
+                List<Person> fullList = new List<Person>();
+                fullList = connection.Query<Person>("dbo.People_InsertMockData").ToList();
+               
+                var DB = new Dashboard();
+                DB.GetMotherAndFatherNameFromID(fullList);
                 return fullList;
-                //foreach (var person in SQLQueryInput)
-                //{
-                //    connection.Query<Person>(person);
-                //}
             }
         }
-        internal void SQLQuery(string SQLQueryInput)
+
+        internal void AlterMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                connection.Query<Person>(SQLQueryInput);
+            {    
+                connection.Query<Person>("dbo.People_AlterMockData").ToList();               
+            }
+        }
+
+        internal void RemakeTable()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {    
+                connection.Query<Person>("DROP TABLE dbo.People");               
+                connection.Query<Person>("dbo.People_CreateTablePeople");               
             }
         }
 
@@ -71,7 +81,6 @@ namespace FamilyTree
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 //sets value to 0 if text entered wont be parsed. Since 0 will be set shown as --
-
                 int _YOBint = 0, _YODint = 0, momId = 0, dadId = 0;
                 bool success;
                 success = Int32.TryParse(_yearOfBirth, out _YOBint);
@@ -134,6 +143,14 @@ namespace FamilyTree
             }
         }
 
+        internal void DeleteAllFromTable()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Query<Person>("dbo.People_EmptyTable");
+            }
+        }
+
         internal static void Delete(Person person)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -156,8 +173,6 @@ namespace FamilyTree
             return dadId;
         }
 
-
-
         internal static int FindMotherId(string _motherName, int momId, List<Person> populatedList)
         {
             for (int i = 0; i < populatedList.Count; i++)
@@ -170,7 +185,5 @@ namespace FamilyTree
             }
             return momId;
         }
-
-
     }
 }
