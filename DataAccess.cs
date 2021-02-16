@@ -52,9 +52,7 @@ namespace FamilyTree
             {
                 List<Person> fullList = new List<Person>();
                 fullList = connection.Query<Person>("dbo.People_InsertMockData").ToList();
-               
-                var DB = new Dashboard();
-                DB.GetMotherAndFatherNameFromID(fullList);
+
                 return fullList;
             }
         }
@@ -62,17 +60,17 @@ namespace FamilyTree
         internal void AlterMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {    
-                connection.Query<Person>("dbo.People_AlterMockData").ToList();               
+            {
+                connection.Query<Person>("dbo.People_AlterMockData").ToList();
             }
         }
 
         internal void RemakeTable()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {    
-                connection.Query<Person>("DROP TABLE dbo.People");               
-                connection.Query<Person>("dbo.People_CreateTablePeople");               
+            {
+                connection.Query<Person>("DROP TABLE dbo.People");
+                connection.Query<Person>("dbo.People_CreateTablePeople");
             }
         }
 
@@ -80,65 +78,49 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                //sets value to 0 if text entered wont be parsed. Since 0 will be set shown as --
-                int _YOBint = 0, _YODint = 0, momId = 0, dadId = 0;
-                bool success;
-                success = Int32.TryParse(_yearOfBirth, out _YOBint);
-                success = Int32.TryParse(_yearOfDeath, out _YODint);
-
-                //Retrieves people and populate new list. Uses to find #ID for parents
                 var newDashboard = new Dashboard();
-                List<Person> populatedList = new List<Person>();
-                populatedList = newDashboard.people;
-
-                //Searches for mother's and father's #ID, that is what SQL needs
-                bool motherSuccess = false, fatherSuccess = false;
-                momId = FindMotherId(_motherName, momId, populatedList);
-                if (momId != 0) { motherSuccess = true; }
-                dadId = FindFatherId(_fatherName, momId, populatedList);
-                if (dadId != 0) { fatherSuccess = true; }
-
+                List<Person> populatedList = populatedList = newDashboard.people;
                 List<Person> newPersonToDataBase = new List<Person>();
+                bool motherSuccess = false, fatherSuccess = false;
+                bool success;
+                int YOBint = 0, YODint = 0, momId = 0, dadId = 0;
 
-                //Creating new person
-                if (motherSuccess && fatherSuccess)
+                success = Int32.TryParse(_yearOfBirth, out YOBint);
+                success = Int32.TryParse(_yearOfDeath, out YODint);
+
+                if (_motherName != null)
                 {
-                    Person nP = new Person
-                    {
-                        Id = 100,
-                        FullName = _fullName, //string
-                        YearOfBirth = _YOBint, //converted to in
-                        PlaceOfBirth = _birthPlace, //string
-                        MotherId = momId, //converted to in
-                        FatherId = dadId, //converted to in
-                        YearOfDeath = _YODint, //converted to in
-                        PlaceOfDeath = _placeOfDeath //string
-                    };
-
-                    newPersonToDataBase.Add(nP);
+                    momId = FindMotherId(_motherName, momId, populatedList);
                 }
                 else
                 {
-                    Person nP = new Person
-                    {
-                        Id = 100,
-                        FullName = _fullName, //string
-                        YearOfBirth = _YOBint, //converted to in
-                        PlaceOfBirth = _birthPlace, //string     
-                        YearOfDeath = _YODint, //converted to in
-                        PlaceOfDeath = _placeOfDeath //string
-                    };
-
-                    newPersonToDataBase.Add(nP);
+                    momId = 0;
                 }
 
-                if (motherSuccess && fatherSuccess)
+                if (_motherName != null)
                 {
-                    connection.Execute("dbo.People_Insert @Id, @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPersonToDataBase);
+                    dadId = FindFatherId(_fatherName, momId, populatedList);
                 }
                 else
                 {
-                    connection.Execute("dbo.People_Insert @Id, @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPersonToDataBase);
+                    dadId = 0;
+                }
+
+                Person nP = new Person
+                {
+                    FullName = _fullName.Trim(), //string
+                    YearOfBirth = YOBint, //converted to int
+                    PlaceOfBirth = _birthPlace.Trim(), //string
+                    MotherId = momId, //converted to int
+                    FatherId = dadId, //converted to int
+                    YearOfDeath = YODint, //converted to int
+                    PlaceOfDeath = _placeOfDeath.Trim() //string
+                };
+
+                if (!populatedList.Contains(nP))
+                {
+                    newPersonToDataBase.Add(nP);
+                    connection.Execute("dbo.People_Insert @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPersonToDataBase);
                 }
             }
         }
@@ -169,6 +151,10 @@ namespace FamilyTree
                     dadId = populatedList[i].Id;
                     break;
                 }
+                else
+                {
+                    dadId = 0;
+                }
             }
             return dadId;
         }
@@ -181,6 +167,10 @@ namespace FamilyTree
                 {
                     momId = populatedList[i].Id;
                     break;
+                }
+                else
+                {
+                    momId = 0;
                 }
             }
             return momId;

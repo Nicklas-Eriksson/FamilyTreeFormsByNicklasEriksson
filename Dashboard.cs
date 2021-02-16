@@ -43,40 +43,69 @@ namespace FamilyTree
             ResetListBoxes();
             TypeOfSearch();
         }
+
         private void InsertButton_Click(object sender, EventArgs e)
         {
             DataAccess db = new DataAccess();
+            var add = AddUpdateDelete_ComboBox.SelectedIndex == 0;
+            var update = AddUpdateDelete_ComboBox.SelectedIndex == 1;
+            var delete = AddUpdateDelete_ComboBox.SelectedIndex == 2;
 
-            if (AddUpdateDelete_ComboBox.SelectedIndex == 0) //Add
+            if (add)
             {
-                db.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+                AddNewMember(db);
             }
-            else if (AddUpdateDelete_ComboBox.SelectedIndex == 1) //Update
+            else if (update)
             {
+                //UpdateMember(db);
+            }
+            else if (delete) //Delete
+            {
+                DeleteMember(db);
+            }
+        }
 
-            }
-            else if (AddUpdateDelete_ComboBox.SelectedIndex == 2) //Delete
+        private void DeleteMember(DataAccess db)
+        {
+            for (int i = 0; i < people.Count; i++)
             {
-                for (int i = 0; i < people.Count; i++)
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
                 {
-                    if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
-                    {
-                        DataAccess.Delete(people[i]);
-                        break;
-                    }
+                    DataAccess.Delete(people[i]);
+                    break;
                 }
-                UpdateScrollListMembers(db);
             }
+
+            UpdateScrollListMembers(db);
+        }
+
+        private void AddNewMember(DataAccess db)
+        {
+            //Full Name, Year of birth, Place of birth, Mother name, Father name, Year of death, Place of death
+            db.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
         }
 
         private void FoundSearchedPerson()
         {
+            //Search via name / year of birth/death / place of birth/death
             for (int i = 0; i < people.Count; i++)
             {
-                if (people[i].FullName == SearchText.Text)
+                var searchIsName = SearchText.Text == people[i].FullName;
+                var searchIsYear = SearchText.Text == people[i].YearOfBirth.ToString() || SearchText.Text == people[i].YearOfDeath.ToString();
+                var searchIsTown = SearchText.Text == people[i].PlaceOfBirth || SearchText.Text == people[i].PlaceOfDeath;
+
+                if (searchIsName)
                 {
                     foundPerson.Add(people[i]);
                     break;
+                }
+                else if(searchIsYear)
+                {
+                    foundPerson.Add(people[i]);
+                }
+                else if(searchIsTown) 
+                {
+                    foundPerson.Add(people[i]);
                 }
             }
         }
@@ -92,6 +121,7 @@ namespace FamilyTree
                         insertedList[i].MotherName = insertedList[j].FullName;
                     }
                 }
+
                 for (int k = 0; k < insertedList.Count; k++)
                 {
                     if (insertedList[i].FatherId == insertedList[k].Id)
@@ -198,12 +228,12 @@ namespace FamilyTree
         private void NormalSearch()
         {
             var db = new DataAccess();
-            people = db.GetAll(/*SearchText.Text*/); //SearchText refers to the search bar
-
+            people = db.GetAll(); //SearchText refers to the search bar
             FoundSearchedPerson();
             GetMotherAndFatherNameFromID(people);
             GetInfo(foundPerson);
         }
+
         private void FindAll()
         {
             var db = new DataAccess();
@@ -219,6 +249,7 @@ namespace FamilyTree
             GetMotherAndFatherNameFromID(people);
             GetInfo(people);
         }
+
         private void FindKids()
         {
             kids.Clear();
@@ -243,6 +274,7 @@ namespace FamilyTree
 
             //FindRelatives(kids, "kids");
         }
+
         private void FindParents()
         {
             parents.Clear();
@@ -277,14 +309,14 @@ namespace FamilyTree
 
             FoundSearchedPerson();
             GetMotherAndFatherNameFromID(people);
-            GetParentNamesForRelatives(insertedList);//RENAME
+            GetParentNamesForRelatives(insertedList);
             GetInfo(insertedList);
         }
 
         private void ResetDB_Button_Click(object sender, EventArgs e)
         {            
             var MD = new MockData();            
-            MD.ResetData(people);            
+            people = MD.ResetData(people);            
             GetParentNamesForRelatives(people);
         }
 

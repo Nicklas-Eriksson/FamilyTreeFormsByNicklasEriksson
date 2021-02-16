@@ -8,14 +8,16 @@ namespace FamilyTree
 {
     public class MockData
     {
-        public void ResetData(List<Person> people)
+        public List<Person> ResetData(List<Person> people)
         {            
             var DB = new Dashboard();
             var DA = new DataAccess();
             DA.RemakeTable();
-            DA.AddMockData();
+            people = DA.AddMockData();
             DA.AlterMockData();
             DB.GetMotherAndFatherNameFromID(people);
+
+            return people;
         }
     }
 }
