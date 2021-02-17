@@ -44,6 +44,37 @@ namespace FamilyTree
             TypeOfSearch();
         }
 
+        private void FoundSearchedPerson()
+        {
+            //Search via name / year of birth/death / place of birth/death
+            for (int i = 0; i < people.Count; i++)
+            {
+                var searchIsName = SearchText.Text == people[i].FullName;
+                var searchIsYear = SearchText.Text == people[i].YearOfBirth.ToString() || SearchText.Text == people[i].YearOfDeath.ToString();
+                var searchIsTown = SearchText.Text == people[i].PlaceOfBirth || SearchText.Text == people[i].PlaceOfDeath;
+
+                if (searchIsName)
+                {
+                    foundPerson.Add(people[i]);
+                    break;
+                }
+                else if (searchIsYear)
+                {
+                    foundPerson.Add(people[i]);
+                }
+                else if (searchIsTown)
+                {
+                    foundPerson.Add(people[i]);
+                }
+                else //if search is LIKE %_%
+                {
+                    var DA = new DataAccess();
+                    string input = SearchText.Text;
+                    foundPerson = DA.GetAll(input);
+                }
+            }
+        }
+
         private void InsertButton_Click(object sender, EventArgs e)
         {
             DataAccess db = new DataAccess();
@@ -83,33 +114,12 @@ namespace FamilyTree
         {
             //Full Name, Year of birth, Place of birth, Mother name, Father name, Year of death, Place of death
             db.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+                        
+            var DA = new DataAccess();
+            people = DA.GetAll();
+            FindParents();
         }
-
-        private void FoundSearchedPerson()
-        {
-            //Search via name / year of birth/death / place of birth/death
-            for (int i = 0; i < people.Count; i++)
-            {
-                var searchIsName = SearchText.Text == people[i].FullName;
-                var searchIsYear = SearchText.Text == people[i].YearOfBirth.ToString() || SearchText.Text == people[i].YearOfDeath.ToString();
-                var searchIsTown = SearchText.Text == people[i].PlaceOfBirth || SearchText.Text == people[i].PlaceOfDeath;
-
-                if (searchIsName)
-                {
-                    foundPerson.Add(people[i]);
-                    break;
-                }
-                else if(searchIsYear)
-                {
-                    foundPerson.Add(people[i]);
-                }
-                else if(searchIsTown) 
-                {
-                    foundPerson.Add(people[i]);
-                }
-            }
-        }
-
+                
         public void GetMotherAndFatherNameFromID(List<Person> insertedList)
         {
             for (int i = 0; i < insertedList.Count; i++)
@@ -229,6 +239,7 @@ namespace FamilyTree
         {
             var db = new DataAccess();
             people = db.GetAll(); //SearchText refers to the search bar
+            foundPerson.Clear();//nah 
             FoundSearchedPerson();
             GetMotherAndFatherNameFromID(people);
             GetInfo(foundPerson);
@@ -270,16 +281,14 @@ namespace FamilyTree
             }
 
             GetMotherAndFatherNameFromID(people);
-            GetInfo(kids);
-
-            //FindRelatives(kids, "kids");
+            GetInfo(kids);            
         }
 
         private void FindParents()
         {
             parents.Clear();
             var db = new DataAccess();
-            people = db.GetAll();//Populates with every1 in sql
+            people = db.GetAll(); //Populates with every1 in sql
             FoundSearchedPerson(); //Populates the foundPersonList with the person from search
 
             for (int i = 0; i < people.Count; i++)
@@ -297,8 +306,7 @@ namespace FamilyTree
             GetMotherAndFatherNameFromID(people);
             GetInfo(parents);
         }
-
-        //Edit
+                
         private void FindRelatives(List<Person> insertedList, string relative)
         {
             people.Clear();//Clears the list if user only preforms multiple find sibling searches
@@ -314,9 +322,14 @@ namespace FamilyTree
         }
 
         private void ResetDB_Button_Click(object sender, EventArgs e)
-        {            
-            var MD = new MockData();            
-            people = MD.ResetData(people);            
+        {
+            ResetDB();
+        }
+
+        private void ResetDB()
+        {
+            var MD = new MockData();
+            people = MD.ResetData(people);
             GetParentNamesForRelatives(people);
         }
 

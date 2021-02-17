@@ -23,6 +23,16 @@ namespace FamilyTree
             }
         }
 
+        internal List<Person> GetAll(string input)
+        {            
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                //The Person object needs to contain "SearchInput" so that it can be exactly matched against the SQL databases "@SearchInput", otherwise it will cast a "must declare the scalar variable"-error.
+                var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
+                return connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
+            }
+        }
+
         internal List<Person> GetRelativesByName(string name, string relative)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -69,8 +79,8 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                connection.Query<Person>("DROP TABLE dbo.People");
-                connection.Query<Person>("dbo.People_CreateTablePeople");
+                connection.Execute("DROP TABLE dbo.People");
+                connection.Execute("dbo.People_CreateTablePeople");
             }
         }
 

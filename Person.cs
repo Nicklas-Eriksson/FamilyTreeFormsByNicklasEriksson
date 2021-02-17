@@ -18,6 +18,7 @@ namespace FamilyTree
         public string FatherName { get; set; }
         public int YearOfDeath { get; set; }
         public string PlaceOfDeath { get; set; }
+        public string SearchInput { get; set; }
 
         public string GetFullName
         {
