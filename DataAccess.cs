@@ -18,20 +18,40 @@ namespace FamilyTree
                 //return connection.Query<Person>($"select * from People where fullName = '{name}'").ToList();
 
                 //This one is safer
-                var fullList = connection.Query<Person>("dbo.spPeople_GetAll").ToList();
-                return fullList;
+                return connection.Query<Person>("dbo.spPeople_GetAll").ToList();
             }
         }
 
         internal List<Person> GetAll(string input)
-        {            
+        {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 //The Person object needs to contain "SearchInput" so that it can be exactly matched against the SQL databases "@SearchInput", otherwise it will cast a "must declare the scalar variable"-error.
                 var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
-                return connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
+                var queryList = connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
+
+                new Dashboard().GetMotherAndFatherNameFromID(queryList);
+                return queryList;
             }
         }
+
+        //internal string SQLSandbox(string input)
+        //{
+        //    using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB"))) //Make another DB for sandbox
+        //    {               
+        //        //try
+        //        //{
+        //        //    var QuaryResults = connection.Query($"{input}").ToString();
+        //        //    return QuaryResults;
+        //        //}
+        //        //catch
+        //        //{
+        //        //    var DA = new Dashboard();
+        //        //    string emptyString = "";
+        //        //    return emptyString;
+        //        //}
+        //    }
+        //}
 
         internal List<Person> GetRelativesByName(string name, string relative)
         {
@@ -59,11 +79,8 @@ namespace FamilyTree
         internal List<Person> AddMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                List<Person> fullList = new List<Person>();
-                fullList = connection.Query<Person>("dbo.People_InsertMockData").ToList();
-
-                return fullList;
+            {                
+                return connection.Query<Person>("dbo.People_InsertMockData").ToList();
             }
         }
 
@@ -71,7 +88,7 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                connection.Query<Person>("dbo.People_AlterMockData").ToList();
+                connection.Execute("dbo.People_AlterMockData");
             }
         }
 
@@ -139,7 +156,7 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                connection.Query<Person>("dbo.People_EmptyTable");
+                connection.Execute("dbo.People_EmptyTable");
             }
         }
 
@@ -148,7 +165,7 @@ namespace FamilyTree
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 var DynamicObject = new DynamicParameters(person);
-                connection.Query<Person>(@"dbo.People_Delete @fullName", DynamicObject);
+                connection.Execute(@"dbo.People_Delete @fullName", DynamicObject);
             }
         }
 

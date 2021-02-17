@@ -47,6 +47,12 @@ namespace FamilyTree
         public string GetPlaceOfDeath
         {
             get { if (PlaceOfDeath == null) { return "--"; } else { return PlaceOfDeath; } }
-        }       
+        }     
+        
+        public override string ToString()
+        {
+            string allInfo = $"{Id},{FullName},{YearOfBirth},{PlaceOfBirth},{MotherId},{FatherId},{YearOfDeath},{PlaceOfDeath},{SearchInput}";
+            return allInfo;
+        }
     }
 }
