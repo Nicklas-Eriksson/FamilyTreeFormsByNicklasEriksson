@@ -84,7 +84,6 @@ namespace FamilyTree
             this.ListBoxName.Name = "ListBoxName";
             this.ListBoxName.Size = new System.Drawing.Size(253, 251);
             this.ListBoxName.TabIndex = 3;
-            this.ListBoxName.SelectedIndexChanged += new System.EventHandler(this.PeopleFoundListBox_SelectedIndexChanged);
             // 
             // SearchText
             // 
@@ -92,7 +91,6 @@ namespace FamilyTree
             this.SearchText.Name = "SearchText";
             this.SearchText.Size = new System.Drawing.Size(249, 29);
             this.SearchText.TabIndex = 4;
-            this.SearchText.TextChanged += new System.EventHandler(this.SearchText_TextChanged);
             // 
             // SearchButton
             // 
@@ -113,7 +111,6 @@ namespace FamilyTree
             this.DisplayNameLabel.Size = new System.Drawing.Size(61, 24);
             this.DisplayNameLabel.TabIndex = 7;
             this.DisplayNameLabel.Text = "Name";
-            this.DisplayNameLabel.Click += new System.EventHandler(this.DisplayNameLabel_Click);
             // 
             // NameInsLabel
             // 
@@ -124,7 +121,6 @@ namespace FamilyTree
             this.NameInsLabel.Size = new System.Drawing.Size(61, 24);
             this.NameInsLabel.TabIndex = 9;
             this.NameInsLabel.Text = "Name";
-            this.NameInsLabel.Click += new System.EventHandler(this.NameInsLabel_Click);
             // 
             // YearOfBirthInsLabel
             // 
@@ -135,7 +131,6 @@ namespace FamilyTree
             this.YearOfBirthInsLabel.Size = new System.Drawing.Size(110, 24);
             this.YearOfBirthInsLabel.TabIndex = 10;
             this.YearOfBirthInsLabel.Text = "Year of birth";
-            this.YearOfBirthInsLabel.Click += new System.EventHandler(this.YearOfBirthInsLabel_Click);
             // 
             // PlaceOfBirthInsLabel
             // 
@@ -146,7 +141,6 @@ namespace FamilyTree
             this.PlaceOfBirthInsLabel.Size = new System.Drawing.Size(118, 24);
             this.PlaceOfBirthInsLabel.TabIndex = 11;
             this.PlaceOfBirthInsLabel.Text = "Place of birth";
-            this.PlaceOfBirthInsLabel.Click += new System.EventHandler(this.PlaceOfBirthInsLabel_Click);
             // 
             // MotherInsLabel
             // 
@@ -157,7 +151,6 @@ namespace FamilyTree
             this.MotherInsLabel.Size = new System.Drawing.Size(69, 24);
             this.MotherInsLabel.TabIndex = 12;
             this.MotherInsLabel.Text = "Mother";
-            this.MotherInsLabel.Click += new System.EventHandler(this.MotherInsLabel_Click);
             // 
             // FatherInsLabel
             // 
@@ -168,7 +161,6 @@ namespace FamilyTree
             this.FatherInsLabel.Size = new System.Drawing.Size(64, 24);
             this.FatherInsLabel.TabIndex = 13;
             this.FatherInsLabel.Text = "Father";
-            this.FatherInsLabel.Click += new System.EventHandler(this.FatherInsLabel_Click);
             // 
             // YearOfDeathInsLabel
             // 
@@ -179,7 +171,6 @@ namespace FamilyTree
             this.YearOfDeathInsLabel.Size = new System.Drawing.Size(121, 24);
             this.YearOfDeathInsLabel.TabIndex = 14;
             this.YearOfDeathInsLabel.Text = "Year of death";
-            this.YearOfDeathInsLabel.Click += new System.EventHandler(this.YearOfDeathInsLabel_Click);
             // 
             // PlaceOfDeathInsLabel
             // 
@@ -190,7 +181,6 @@ namespace FamilyTree
             this.PlaceOfDeathInsLabel.Size = new System.Drawing.Size(129, 24);
             this.PlaceOfDeathInsLabel.TabIndex = 15;
             this.PlaceOfDeathInsLabel.Text = "Place of death";
-            this.PlaceOfDeathInsLabel.Click += new System.EventHandler(this.PlaceOfDeathInsLabel_Click);
             // 
             // TextBoxName
             // 
@@ -198,7 +188,6 @@ namespace FamilyTree
             this.TextBoxName.Name = "TextBoxName";
             this.TextBoxName.Size = new System.Drawing.Size(249, 29);
             this.TextBoxName.TabIndex = 16;
-            this.TextBoxName.TextChanged += new System.EventHandler(this.TextBoxName_TextChanged);
             // 
             // TextBoxYearOfBirth
             // 
@@ -206,7 +195,6 @@ namespace FamilyTree
             this.TextBoxYearOfBirth.Name = "TextBoxYearOfBirth";
             this.TextBoxYearOfBirth.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfBirth.TabIndex = 17;
-            this.TextBoxYearOfBirth.TextChanged += new System.EventHandler(this.TextBoxYearOfBirth_TextChanged);
             // 
             // TextBoxPlaceOfBirth
             // 
@@ -214,7 +202,6 @@ namespace FamilyTree
             this.TextBoxPlaceOfBirth.Name = "TextBoxPlaceOfBirth";
             this.TextBoxPlaceOfBirth.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfBirth.TabIndex = 18;
-            this.TextBoxPlaceOfBirth.TextChanged += new System.EventHandler(this.TextBoxPlaceOfBith_TextChanged);
             // 
             // TextBoxYearOfDeath
             // 
@@ -222,7 +209,6 @@ namespace FamilyTree
             this.TextBoxYearOfDeath.Name = "TextBoxYearOfDeath";
             this.TextBoxYearOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxYearOfDeath.TabIndex = 21;
-            this.TextBoxYearOfDeath.TextChanged += new System.EventHandler(this.TextBoxYearOfDeath_TextChanged);
             // 
             // TextBoxFather
             // 
@@ -230,7 +216,6 @@ namespace FamilyTree
             this.TextBoxFather.Name = "TextBoxFather";
             this.TextBoxFather.Size = new System.Drawing.Size(249, 29);
             this.TextBoxFather.TabIndex = 20;
-            this.TextBoxFather.TextChanged += new System.EventHandler(this.TextBoxFather_TextChanged);
             // 
             // TextBoxMother
             // 
@@ -238,7 +223,6 @@ namespace FamilyTree
             this.TextBoxMother.Name = "TextBoxMother";
             this.TextBoxMother.Size = new System.Drawing.Size(249, 29);
             this.TextBoxMother.TabIndex = 19;
-            this.TextBoxMother.TextChanged += new System.EventHandler(this.TextBoxMother_TextChanged);
             // 
             // TextBoxPlaceOfDeath
             // 
@@ -246,7 +230,6 @@ namespace FamilyTree
             this.TextBoxPlaceOfDeath.Name = "TextBoxPlaceOfDeath";
             this.TextBoxPlaceOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfDeath.TabIndex = 22;
-            this.TextBoxPlaceOfDeath.TextChanged += new System.EventHandler(this.TextBoxPlaceOfDeath_TextChanged);
             // 
             // OkButton
             // 
@@ -279,7 +262,6 @@ namespace FamilyTree
             this.FamilyTreeLogoLabel.Size = new System.Drawing.Size(556, 92);
             this.FamilyTreeLogoLabel.TabIndex = 27;
             this.FamilyTreeLogoLabel.Text = "Family Tree";
-            this.FamilyTreeLogoLabel.Click += new System.EventHandler(this.label12_Click);
             // 
             // DisplayYearOfBirthLabel
             // 
@@ -290,7 +272,6 @@ namespace FamilyTree
             this.DisplayYearOfBirthLabel.Size = new System.Drawing.Size(91, 24);
             this.DisplayYearOfBirthLabel.TabIndex = 28;
             this.DisplayYearOfBirthLabel.Text = "Birth Year";
-            this.DisplayYearOfBirthLabel.Click += new System.EventHandler(this.label13_Click);
             // 
             // DisplayMotherLabel
             // 
@@ -301,7 +282,6 @@ namespace FamilyTree
             this.DisplayMotherLabel.Size = new System.Drawing.Size(69, 24);
             this.DisplayMotherLabel.TabIndex = 29;
             this.DisplayMotherLabel.Text = "Mother";
-            this.DisplayMotherLabel.Click += new System.EventHandler(this.label14_Click);
             // 
             // DisplayPlaceOfDeathLabel
             // 
@@ -360,7 +340,6 @@ namespace FamilyTree
             this.ListBoxYOB.Name = "ListBoxYOB";
             this.ListBoxYOB.Size = new System.Drawing.Size(90, 251);
             this.ListBoxYOB.TabIndex = 35;
-            this.ListBoxYOB.SelectedIndexChanged += new System.EventHandler(this.ListBoxYOB_SelectedIndexChanged);
             // 
             // ListBoxPOB
             // 
@@ -371,7 +350,6 @@ namespace FamilyTree
             this.ListBoxPOB.Name = "ListBoxPOB";
             this.ListBoxPOB.Size = new System.Drawing.Size(105, 251);
             this.ListBoxPOB.TabIndex = 36;
-            this.ListBoxPOB.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // ListBoxYOD
             // 
@@ -423,7 +401,6 @@ namespace FamilyTree
             this.SearchLabel.Size = new System.Drawing.Size(82, 21);
             this.SearchLabel.TabIndex = 1;
             this.SearchLabel.Text = "Search";
-            this.SearchLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // monthCalendar1
             // 
@@ -456,7 +433,6 @@ namespace FamilyTree
             this.SearchMenu.Name = "SearchMenu";
             this.SearchMenu.Size = new System.Drawing.Size(192, 32);
             this.SearchMenu.TabIndex = 44;
-            this.SearchMenu.SelectedIndexChanged += new System.EventHandler(this.SearchMenu_SelectedIndexChanged);
             // 
             // AddUpdateDelete_ComboBox
             // 
@@ -481,7 +457,6 @@ namespace FamilyTree
             this.MemberList_ComboBox.Name = "MemberList_ComboBox";
             this.MemberList_ComboBox.Size = new System.Drawing.Size(249, 32);
             this.MemberList_ComboBox.TabIndex = 46;
-            this.MemberList_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MemberList_ComboBox_SelectedIndexChanged);
             // 
             // AddUpdateDelete_Text
             // 
@@ -493,7 +468,6 @@ namespace FamilyTree
             this.AddUpdateDelete_Text.Size = new System.Drawing.Size(317, 29);
             this.AddUpdateDelete_Text.TabIndex = 47;
             this.AddUpdateDelete_Text.Text = "Add-/Update-/Delete";
-            this.AddUpdateDelete_Text.Click += new System.EventHandler(this.AddUpdateDelete_Text_Click);
             // 
             // ResetDB_Button
             // 
@@ -559,7 +533,6 @@ namespace FamilyTree
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Dashboard";
             this.Text = "Family Tree";
-            this.Load += new System.EventHandler(this.Dashboard_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TreePNGBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -21,10 +21,10 @@ namespace FamilyTree
         public Dashboard()
         {
             InitializeComponent();
-            UpdateScrollListMembers(new DataAccess());
+            UpdateScrollListData(new DataAccess());
         }
 
-        private void UpdateScrollListMembers(DataAccess db)
+        private void UpdateScrollListData(DataAccess db)
         {
             people.Clear();
             MemberList_ComboBox.Items.Clear();
@@ -69,31 +69,73 @@ namespace FamilyTree
                 DeleteMember(dataAccess);
             }
         }
-        
+
         private void UpdateMember(DataAccess dataAccess)
         {
             for (int i = 0; i < people.Count; i++)
             {
                 if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
                 {
-                    dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+                    bool success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
+                    bool success2 = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
 
+                    int momId = GetMotherId(i);
+                    int dadId = GetFatherId(i);
 
-
-                    people[i].FullName = TextBoxName.Text;
-                    people[i].YearOfBirth = TextBoxYearOfBirth.Text;
-                    people[i].PlaceOfBirth = TextBoxPlaceOfBirth.Text;
-                    people[i].MotherId = TextBoxMother.Text;
-                    people[i].FatherId = TextBoxFather.Text;
-                    people[i].GetYearOfDeath = TextBoxYearOfDeath.Text;
-                    people[i].PlaceOfDeath = TextBoxPlaceOfDeath.Text;
-                    people = dataAccess.Update(people[i]);
+                    UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
+                    UpdateScrollListData(dataAccess);
                     break;
                 }
             }
-
-            UpdateScrollListMembers(dataAccess);
         }
+
+        private void UpdatePersonInformation(DataAccess dataAccess, int i, int YOB, int YOD, int momId, int dadId)
+        {
+            people[i].FullName = TextBoxName.Text;
+            people[i].YearOfBirth = YOB;
+            people[i].PlaceOfBirth = TextBoxPlaceOfBirth.Text;
+            people[i].MotherId = momId;
+            people[i].FatherId = dadId;
+            people[i].YearOfDeath = YOD;
+            people[i].PlaceOfDeath = TextBoxPlaceOfDeath.Text;
+            people = dataAccess.Update(people[i]);
+        }
+
+        private int GetMotherId(int i)
+        {
+            int momId = default;
+
+            if (TextBoxMother.Text.ToString() != "")
+            {
+                for (int j = 0; i < people.Count; j++)
+                {
+                    if (TextBoxMother.Text == people[j].FullName)
+                    {
+                        return momId = people[j].Id;
+                    }
+                }
+            }
+
+            return momId;
+        }
+
+        private int GetFatherId(int i)
+        {
+            int dadId = default;
+
+            if (TextBoxFather.Text.ToString() != "")
+            {
+                for (int j = 0; i < people.Count; j++)
+                {
+                    if (TextBoxFather.Text == people[j].FullName)
+                    {
+                        return dadId = people[j].Id;
+                    }
+                }
+            }
+
+            return dadId;
+        }        
 
         private void DeleteMember(DataAccess dataAccess)
         {
@@ -106,7 +148,7 @@ namespace FamilyTree
                 }
             }
 
-            UpdateScrollListMembers(dataAccess);
+            UpdateScrollListData(dataAccess);
         }
 
         private void AddNewMember(DataAccess dataAccess)
@@ -234,7 +276,7 @@ namespace FamilyTree
         }
 
         private void NormalSearch()
-        {            
+        {
             people = new DataAccess().GetAll(); //SearchText refers to the search bar
             foundPerson.Clear();
             FoundSearchedPerson();
@@ -284,7 +326,7 @@ namespace FamilyTree
         private void FindParents()
         {
             parents.Clear();
-            people = new DataAccess().GetAll(); //Populates with every1 in sql
+            people = new DataAccess().GetAll(); //Updates list
             FoundSearchedPerson(); //Populates the foundPersonList with the person from search
 
             for (int i = 0; i < people.Count; i++)
@@ -336,40 +378,5 @@ namespace FamilyTree
 
             new Dashboard2().Show();
         }
-
-        ////Cant delete these.. Will throw error
-        //private void Dashboard_Load(object sender, EventArgs e) { }
-        //private void pictureBox1_Click(object sender, EventArgs e) { }
-        //private void label1_Click(object sender, EventArgs e) { }
-        //private void label2_Click(object sender, EventArgs e) { }
-        //private void AddNewFamilyMemberLabel_Click(object sender, EventArgs e) { }
-        //private void NameInsLabel_Click(object sender, EventArgs e) { }
-        //private void label7_Click(object sender, EventArgs e) { }
-        //private void label8_Click(object sender, EventArgs e) { }
-        //private void FatherInsLabel_Click(object sender, EventArgs e) { }
-        //private void label12_Click(object sender, EventArgs e) { }
-        //private void label13_Click(object sender, EventArgs e) { }
-        //private void label14_Click(object sender, EventArgs e) { }
-        //private void DisplayNameLabel_Click(object sender, EventArgs e) { }
-        //private void YearOfBirthInsLabel_Click(object sender, EventArgs e) { }
-        //private void PeopleFoundListBox_SelectedIndexChanged(object sender, EventArgs e) { }
-        //private void SearchText_TextChanged(object sender, EventArgs e) { }
-        //private void listBox2_SelectedIndexChanged(object sender, EventArgs e) { }
-        //private void ListBoxYOB_SelectedIndexChanged(object sender, EventArgs e) { }
-        //private void PlaceOfBirthInsLabel_Click(object sender, EventArgs e) { }
-        //private void MotherInsLabel_Click(object sender, EventArgs e) { }
-        //private void YearOfDeathInsLabel_Click(object sender, EventArgs e) { }
-        //private void PlaceOfDeathInsLabel_Click(object sender, EventArgs e) { }
-        //private void TextBoxPlaceOfDeath_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxYearOfDeath_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxFather_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxMother_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxPlaceOfBith_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxYearOfBirth_TextChanged(object sender, EventArgs e) { }
-        //private void TextBoxName_TextChanged(object sender, EventArgs e) { }
-        //private void SearchMenu_SelectedIndexChanged(object sender, EventArgs e) { }
-        //private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
-        //private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
-        //private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
     }
 }
