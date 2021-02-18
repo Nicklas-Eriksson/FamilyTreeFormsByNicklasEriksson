@@ -135,7 +135,7 @@ namespace FamilyTree
             }
 
             return dadId;
-        }        
+        }
 
         private void DeleteMember(DataAccess dataAccess)
         {
@@ -263,7 +263,7 @@ namespace FamilyTree
             }
             else if (SearchMenu.SelectedIndex == 2)//Find Siblings:
             {
-                FindRelatives(siblings, "siblings");
+                FindRelatives(siblings, "siblings"); //Edit
             }
             else if (SearchMenu.SelectedIndex == 3) //Find Kids
             {
@@ -273,6 +273,70 @@ namespace FamilyTree
             {
                 FindParents();
             }
+            else if (SearchMenu.SelectedIndex == 5)//Find Parents
+            {
+                FindCousins();
+            }
+        }
+
+        private void FindCousins()
+        {
+            var cousinList = new List<Person>();
+            var parentsSiblings = new List<Person>();
+
+            cousinList.Clear();
+            parentsSiblings.Clear();
+            foundPerson.Clear();
+            parents.Clear();
+
+            //FindParents
+            FoundSearchedPerson();
+            var DA = new DataAccess();
+            people = DA.GetAll();
+
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (foundPerson[0].MotherId == people[i].Id)
+                {
+                    parents.Add(people[i]);
+                }
+                else if (foundPerson[0].FatherId == people[i].Id)
+                {
+                    parents.Add(people[i]);
+                }
+            }
+
+            foreach (var parent in parents)
+            {
+                parentsSiblings.AddRange(DA.GetRelativesByName(parent.FullName, "siblings"));
+            }
+
+            //FindKids            
+            for (int j = 0; j < parentsSiblings.Count; j++)
+            {
+                for (int k = 0; k < people.Count; k++)
+                {
+                    if (people[k].MotherId == parentsSiblings[j].Id)
+                    {
+                        cousinList.Add(people[k]);
+                    }
+                    else if (people[k].FatherId == parentsSiblings[j].Id)
+                    {
+                        cousinList.Add(people[k]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < cousinList.Count; i++)
+            {
+                if(foundPerson[0].Id == cousinList[i].Id)
+                {
+                    cousinList.Remove(cousinList[i]);
+                }
+            }
+
+            GetMotherAndFatherNameFromID(cousinList);
+            GetInfo(cousinList);            
         }
 
         private void NormalSearch()
@@ -353,6 +417,13 @@ namespace FamilyTree
             people = new DataAccess().GetAll(); //Populate the list if user only preforms multiple find sibling searches
 
             FoundSearchedPerson();
+            for (int i = 0; i < insertedList.Count; i++)
+            {
+                if (foundPerson[0].Id == insertedList[i].Id)
+                {
+                    insertedList.Remove(insertedList[i]);
+                }
+            }
             GetMotherAndFatherNameFromID(people);
             GetParentNamesForRelatives(insertedList);
             GetInfo(insertedList);

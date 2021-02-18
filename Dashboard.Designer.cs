@@ -428,7 +428,8 @@ namespace FamilyTree
             "Find All:",
             "Find Siblings:",
             "Find Kids:",
-            "Find Parents"});
+            "Find Parents:",
+            "Find Cousins:"});
             this.SearchMenu.Location = new System.Drawing.Point(167, 9);
             this.SearchMenu.Name = "SearchMenu";
             this.SearchMenu.Size = new System.Drawing.Size(192, 32);
