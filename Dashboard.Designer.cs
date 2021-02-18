@@ -48,7 +48,7 @@ namespace FamilyTree
             this.TextBoxFather = new System.Windows.Forms.TextBox();
             this.TextBoxMother = new System.Windows.Forms.TextBox();
             this.TextBoxPlaceOfDeath = new System.Windows.Forms.TextBox();
-            this.OkButton = new System.Windows.Forms.Button();
+            this.Ok_Button = new System.Windows.Forms.Button();
             this.TreePNGBox = new System.Windows.Forms.PictureBox();
             this.FamilyTreeLogoLabel = new System.Windows.Forms.Label();
             this.DisplayYearOfBirthLabel = new System.Windows.Forms.Label();
@@ -67,7 +67,7 @@ namespace FamilyTree
             this.SearchLabel = new System.Windows.Forms.Label();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.NewDB_Button = new System.Windows.Forms.Button();
-            this.SearchMenu = new System.Windows.Forms.ComboBox();
+            this.Search_ComboBox = new System.Windows.Forms.ComboBox();
             this.AddUpdateDelete_ComboBox = new System.Windows.Forms.ComboBox();
             this.MemberList_ComboBox = new System.Windows.Forms.ComboBox();
             this.AddUpdateDelete_Text = new System.Windows.Forms.Label();
@@ -231,15 +231,15 @@ namespace FamilyTree
             this.TextBoxPlaceOfDeath.Size = new System.Drawing.Size(249, 29);
             this.TextBoxPlaceOfDeath.TabIndex = 22;
             // 
-            // OkButton
+            // Ok_Button
             // 
-            this.OkButton.Location = new System.Drawing.Point(411, 703);
-            this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(72, 29);
-            this.OkButton.TabIndex = 23;
-            this.OkButton.Text = "Ok";
-            this.OkButton.UseVisualStyleBackColor = true;
-            this.OkButton.Click += new System.EventHandler(this.InsertButton_Click);
+            this.Ok_Button.Location = new System.Drawing.Point(411, 703);
+            this.Ok_Button.Name = "Ok_Button";
+            this.Ok_Button.Size = new System.Drawing.Size(72, 29);
+            this.Ok_Button.TabIndex = 23;
+            this.Ok_Button.Text = "Ok";
+            this.Ok_Button.UseVisualStyleBackColor = true;
+            this.Ok_Button.Click += new System.EventHandler(this.Ok_Button_Click);
             // 
             // TreePNGBox
             // 
@@ -414,26 +414,26 @@ namespace FamilyTree
             this.NewDB_Button.Name = "NewDB_Button";
             this.NewDB_Button.Size = new System.Drawing.Size(167, 28);
             this.NewDB_Button.TabIndex = 42;
-            this.NewDB_Button.Text = "New Database";
+            this.NewDB_Button.Text = "SQL Sandbox";
             this.NewDB_Button.UseVisualStyleBackColor = true;
             this.NewDB_Button.Click += new System.EventHandler(this.CodeSandboxButton_Click);
             // 
-            // SearchMenu
+            // Search_ComboBox
             // 
-            this.SearchMenu.BackColor = System.Drawing.Color.White;
-            this.SearchMenu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SearchMenu.FormattingEnabled = true;
-            this.SearchMenu.Items.AddRange(new object[] {
+            this.Search_ComboBox.BackColor = System.Drawing.Color.White;
+            this.Search_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Search_ComboBox.FormattingEnabled = true;
+            this.Search_ComboBox.Items.AddRange(new object[] {
             "Normal Search:",
             "Find All:",
             "Find Siblings:",
             "Find Kids:",
             "Find Parents:",
             "Find Cousins:"});
-            this.SearchMenu.Location = new System.Drawing.Point(167, 9);
-            this.SearchMenu.Name = "SearchMenu";
-            this.SearchMenu.Size = new System.Drawing.Size(192, 32);
-            this.SearchMenu.TabIndex = 44;
+            this.Search_ComboBox.Location = new System.Drawing.Point(167, 9);
+            this.Search_ComboBox.Name = "Search_ComboBox";
+            this.Search_ComboBox.Size = new System.Drawing.Size(192, 32);
+            this.Search_ComboBox.TabIndex = 44;
             // 
             // AddUpdateDelete_ComboBox
             // 
@@ -490,7 +490,7 @@ namespace FamilyTree
             this.Controls.Add(this.AddUpdateDelete_Text);
             this.Controls.Add(this.MemberList_ComboBox);
             this.Controls.Add(this.AddUpdateDelete_ComboBox);
-            this.Controls.Add(this.SearchMenu);
+            this.Controls.Add(this.Search_ComboBox);
             this.Controls.Add(this.NewDB_Button);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.ListBoxPOD);
@@ -508,7 +508,7 @@ namespace FamilyTree
             this.Controls.Add(this.DisplayYearOfBirthLabel);
             this.Controls.Add(this.FamilyTreeLogoLabel);
             this.Controls.Add(this.TreePNGBox);
-            this.Controls.Add(this.OkButton);
+            this.Controls.Add(this.Ok_Button);
             this.Controls.Add(this.TextBoxPlaceOfDeath);
             this.Controls.Add(this.TextBoxYearOfDeath);
             this.Controls.Add(this.TextBoxFather);
@@ -542,7 +542,7 @@ namespace FamilyTree
 
         #endregion
         private System.Windows.Forms.ListBox ListBoxName;
-        private System.Windows.Forms.TextBox SearchText;
+        internal System.Windows.Forms.TextBox SearchText;
         private System.Windows.Forms.Button SearchButton;
         private System.Windows.Forms.Label DisplayNameLabel;
         private System.Windows.Forms.Label NameInsLabel;
@@ -559,7 +559,7 @@ namespace FamilyTree
         private System.Windows.Forms.TextBox TextBoxFather;
         private System.Windows.Forms.TextBox TextBoxMother;
         private System.Windows.Forms.TextBox TextBoxPlaceOfDeath;
-        private System.Windows.Forms.Button OkButton;
+        private System.Windows.Forms.Button Ok_Button;
         private System.Windows.Forms.PictureBox TreePNGBox;
         private System.Windows.Forms.Label FamilyTreeLogoLabel;
         private System.Windows.Forms.Label DisplayYearOfBirthLabel;
@@ -578,9 +578,9 @@ namespace FamilyTree
         private System.Windows.Forms.Label SearchLabel;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
         private System.Windows.Forms.Button NewDB_Button;
-        private System.Windows.Forms.ComboBox SearchMenu;
+        public System.Windows.Forms.ComboBox Search_ComboBox;
         private System.Windows.Forms.ComboBox AddUpdateDelete_ComboBox;
-        private System.Windows.Forms.ComboBox MemberList_ComboBox;
+        internal System.Windows.Forms.ComboBox MemberList_ComboBox;
         private System.Windows.Forms.Label AddUpdateDelete_Text;
         private System.Windows.Forms.Button ResetDB_Button;
     }

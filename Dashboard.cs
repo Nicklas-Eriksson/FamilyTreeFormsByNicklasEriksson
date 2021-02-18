@@ -1,46 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FamilyTree
 {
     public partial class Dashboard : Form
-    {
-        public List<Person> people = new List<Person>();
+    {        
+        internal List<Person> people = new List<Person>();
         private List<Person> foundPerson = new List<Person>();
         private List<Person> siblings = new List<Person>();
         private List<Person> parents = new List<Person>();
         private List<Person> kids = new List<Person>();
-
+        
+        /// <summary>
+        /// Initializing components and adds members from SQL-DB to display in the scroll list for Add/Update/delete.
+        /// </summary>
         public Dashboard()
         {
             InitializeComponent();
             UpdateScrollListData(new DataAccess());
         }
 
+        /// <summary>
+        /// Press the reset button to restore the database with the "mock data".
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetDB_Button_Click(object sender, EventArgs e)
         {
-            ResetDB();
+            var MD = new MockData();
+            people = MD.ResetData(people);
+            GetParentNamesForRelatives(people);
         }
-
-        private void SearchButton_Click(object sender, EventArgs e)
-        {
-            ResetListBoxes();
-            TypeOfSearch();
-        }
-
-        private void InsertButton_Click(object sender, EventArgs e)
+                
+        /// <summary>
+        /// Depending on what you chose from the combo box you can Add/Update/Delete a member to or from the SQL server.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Ok_Button_Click(object sender, EventArgs e)
         {
             DataAccess dataAccess = new DataAccess();
-            var add = AddUpdateDelete_ComboBox.SelectedIndex == 0;
-            var update = AddUpdateDelete_ComboBox.SelectedIndex == 1;
-            var delete = AddUpdateDelete_ComboBox.SelectedIndex == 2;
+            var add = Search_ComboBox.SelectedIndex == 0;
+            var update = Search_ComboBox.SelectedIndex == 1;
+            var delete = Search_ComboBox.SelectedIndex == 2;
 
             if (add)
             {
@@ -56,6 +59,11 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// This button takes you to another forms window where you can create some SQL tables for fun.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CodeSandboxButton_Click(object sender, EventArgs e)
         {
             UserControl control = new UserControl();
@@ -64,144 +72,67 @@ namespace FamilyTree
             new Dashboard2().Show();
         }
 
-
-
-
-
-        private void ResetDB()
+        /// <summary>
+        /// The search bars text combined with the combo box will decide what the results will be.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            var MD = new MockData();
-            people = MD.ResetData(people);
-            GetParentNamesForRelatives(people);
+            ResetListBoxes();
+            TypeOfSearch();
         }
 
-        private void ResetListBoxes()
+        /// <summary>
+        /// Lets you decide what type of search you want.
+        /// </summary>
+        public void TypeOfSearch()
         {            
-            ListBoxName.DataSource = null;
-            ListBoxName.Items.Clear();
-            ListBoxYOB.DataSource = null;
-            ListBoxYOB.Items.Clear();
-            ListBoxPOB.DataSource = null;
-            ListBoxPOB.Items.Clear();
-            ListBoxMother.DataSource = null;
-            ListBoxMother.Items.Clear();
-            ListBoxFather.DataSource = null;
-            ListBoxFather.Items.Clear();
-            ListBoxYOD.DataSource = null;
-            ListBoxYOD.Items.Clear();
-            ListBoxPOD.DataSource = null;
-            ListBoxPOD.Items.Clear();
-                        
-            foundPerson.Clear();
-            people.Clear();
-        }
-
-        public void DisplayInfoFromList(List<Person> insertedList)
-        {
-            ListBoxName.DataSource = insertedList;
-            ListBoxName.DisplayMember = "GetFullName";
-
-            ListBoxYOB.DataSource = insertedList;
-            ListBoxYOB.DisplayMember = "GetYearOfBirth";
-
-            ListBoxPOB.DataSource = insertedList;
-            ListBoxPOB.DisplayMember = "GetPlaceOfBirth";
-
-            ListBoxMother.DataSource = insertedList;
-            ListBoxMother.DisplayMember = "GetMotherName";
-
-            ListBoxFather.DataSource = insertedList;
-            ListBoxFather.DisplayMember = "GetFatherName";
-
-            ListBoxYOD.DataSource = insertedList;
-            ListBoxYOD.DisplayMember = "GetYearOfDeath";
-
-            ListBoxPOD.DataSource = insertedList;
-            ListBoxPOD.DisplayMember = "GetPlaceOfDeath";
-        }
-
-        private void AddNewMember(DataAccess dataAccess)
-        {
-            //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
-            dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
-
-            people = dataAccess.GetAll();
-            FindParents();
-        }
-
-        private void UpdateMember(DataAccess dataAccess)
-        {
-            for (int i = 0; i < people.Count; i++)
-            {
-                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
-                {
-                    bool success;
-                    success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
-                    success = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
-                    int momId = GetMotherId(i);
-                    int dadId = GetFatherId(i);
-                    UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
-                    UpdateScrollListData(dataAccess);
-                    break;
-                }
-            }
-        }
-
-        private void DeleteMember(DataAccess dataAccess)
-        {
-            for (int i = 0; i < people.Count; i++)
-            {
-                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
-                {
-                    DataAccess.Delete(people[i]);
-                    break;
-                }
-            }
-
-            UpdateScrollListData(dataAccess);
-        }
-
-        private void TypeOfSearch()
-        {
-            if (SearchMenu.SelectedIndex == 0)
+            if (Search_ComboBox.SelectedIndex == 0)
             {
                 NormalSearch();
             }
-            else if (SearchMenu.SelectedIndex == 1)
+            else if (Search_ComboBox.SelectedIndex == 1)
             {
                 FindAll();
             }
-            else if (SearchMenu.SelectedIndex == 2)
+            else if (Search_ComboBox.SelectedIndex == 2)
             {
                 FindSiblings(siblings);
             }
-            else if (SearchMenu.SelectedIndex == 3)
+            else if (Search_ComboBox.SelectedIndex == 3)
             {
                 FindKids();
             }
-            else if (SearchMenu.SelectedIndex == 4)
+            else if (Search_ComboBox.SelectedIndex == 4)
             {
                 FindParents();
             }
-            else if (SearchMenu.SelectedIndex == 5)
+            else if (Search_ComboBox.SelectedIndex == 5)
             {
                 FindCousins();
             }
         }
 
+        /// <summary>
+        /// Searches in the sql server using LIKE % % to get your search results.
+        /// </summary>
         private void NormalSearch()
         {
             foundPerson.Clear();
             people = new DataAccess().GetAll();
             FoundSearchedPerson();
-            GetMotherAndFatherNameFromID(people);
+           GetMotherAndFatherNameFromID(people);
             DisplayInfoFromList(foundPerson);
         }
 
+        /// <summary>
+        /// Displays every person in the database.
+        /// </summary>
         private void FindAll()
         {
             var db = new DataAccess();
-            people.Clear();
+           people.Clear();
             MemberList_ComboBox.Items.Clear();
             people = db.GetAll();
 
@@ -214,6 +145,10 @@ namespace FamilyTree
             DisplayInfoFromList(people);
         }
 
+        /// <summary>
+        /// Searches the SQL-server for persons with the same parent ID# as the one you searched for.
+        /// </summary>
+        /// <param name="insertedList"></param>
         private void FindSiblings(List<Person> insertedList)
         {
             people.Clear();
@@ -233,12 +168,15 @@ namespace FamilyTree
             DisplayInfoFromList(insertedList);
         }
 
+        /// <summary>
+        /// Searches the SQL-server for persons with the searched persons ID# as their parent ID#.
+        /// </summary>
         private void FindKids()
         {
             kids.Clear();
             var db = new DataAccess();
-            people = db.GetAll();//Populates with every1 in sql
-            FoundSearchedPerson(); //Populates the foundPersonList with the person from search
+            people = db.GetAll();
+            FoundSearchedPerson();
 
             for (int i = 0; i < people.Count; i++)
             {
@@ -256,6 +194,9 @@ namespace FamilyTree
             DisplayInfoFromList(kids);
         }
 
+        /// <summary>
+        /// Uses the persons motherId and fatherId variable to locate their parents.
+        /// </summary>
         private void FindParents()
         {
             parents.Clear();
@@ -278,6 +219,9 @@ namespace FamilyTree
             DisplayInfoFromList(parents);
         }
 
+        /// <summary>
+        /// First finds searched persons parents > finds parents siblings > finds the aunts and uncles kids > displays them as cousins.
+        /// </summary>
         private void FindCousins()
         {
             var cousinList = new List<Person>();
@@ -287,7 +231,7 @@ namespace FamilyTree
             parentsSiblings.Clear();
             foundPerson.Clear();
             parents.Clear();
-                       
+
             FoundSearchedPerson();
             var DA = new DataAccess();
             people = DA.GetAll();
@@ -326,16 +270,19 @@ namespace FamilyTree
 
             for (int i = 0; i < cousinList.Count; i++)
             {
-                if(foundPerson[0].Id == cousinList[i].Id)
+                if (foundPerson[0].Id == cousinList[i].Id)
                 {
                     cousinList.Remove(cousinList[i]);
                 }
             }
 
             GetMotherAndFatherNameFromID(cousinList);
-            DisplayInfoFromList(cousinList);            
+            DisplayInfoFromList(cousinList);
         }
 
+        /// <summary>
+        /// Gets information from the person that is being searched for, so that he/she can be compared to others.
+        /// </summary>
         private void FoundSearchedPerson()
         {
             var DA = new DataAccess();
@@ -344,6 +291,115 @@ namespace FamilyTree
             GetMotherAndFatherNameFromID(foundPerson);
         }
 
+        /// <summary>
+        /// Populates the list boxes so they can display information.
+        /// </summary>
+        /// <param name="insertedList">Insert the list that you want to display</param>
+        public void DisplayInfoFromList(List<Person> insertedList)
+        {
+            ListBoxName.DataSource = insertedList;
+            ListBoxName.DisplayMember = "GetFullName";
+
+            ListBoxYOB.DataSource = insertedList;
+            ListBoxYOB.DisplayMember = "GetYearOfBirth";
+
+            ListBoxPOB.DataSource = insertedList;
+            ListBoxPOB.DisplayMember = "GetPlaceOfBirth";
+
+            ListBoxMother.DataSource = insertedList;
+            ListBoxMother.DisplayMember = "GetMotherName";
+
+            ListBoxFather.DataSource = insertedList;
+            ListBoxFather.DisplayMember = "GetFatherName";
+
+            ListBoxYOD.DataSource = insertedList;
+            ListBoxYOD.DisplayMember = "GetYearOfDeath";
+
+            ListBoxPOD.DataSource = insertedList;
+            ListBoxPOD.DisplayMember = "GetPlaceOfDeath";
+        }
+
+        /// <summary>
+        /// Clears the list boxes so that they can display other information than before.
+        /// </summary>
+        private void ResetListBoxes()
+        {            
+            ListBoxName.DataSource = null;
+            ListBoxName.Items.Clear();
+            ListBoxYOB.DataSource = null;
+            ListBoxYOB.Items.Clear();
+            ListBoxPOB.DataSource = null;
+            ListBoxPOB.Items.Clear();
+            ListBoxMother.DataSource = null;
+            ListBoxMother.Items.Clear();
+            ListBoxFather.DataSource = null;
+            ListBoxFather.Items.Clear();
+            ListBoxYOD.DataSource = null;
+            ListBoxYOD.Items.Clear();
+            ListBoxPOD.DataSource = null;
+            ListBoxPOD.Items.Clear();
+                        
+            foundPerson.Clear();
+            people.Clear();
+        }
+
+        /// <summary>
+        /// Creates a new person object and populates it with info from the textboxes that are bein filled in. Thereafter that person is being inserted into SQL.
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        private void AddNewMember(DataAccess dataAccess)
+        {
+            //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
+            dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+
+            people = dataAccess.GetAll();
+            FindParents();
+        }
+
+        /// <summary>
+        /// Takes the new information provided from the text boxes and updates that person in SQL.
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        private void UpdateMember(DataAccess dataAccess)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                {
+                    bool success;
+                    success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
+                    success = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
+                    int momId = GetMotherId(i);
+                    int dadId = GetFatherId(i);
+                    UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
+                    UpdateScrollListData(dataAccess);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the person chosen from the scrollable list which displays all the members in the database.
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        private void DeleteMember(DataAccess dataAccess)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                {
+                    DataAccess.Delete(people[i]);
+                    break;
+                }
+            }
+
+            UpdateScrollListData(dataAccess);
+        }       
+
+        /// <summary>
+        /// Updates the scrollable list that displays all members in the database if there has been a change.
+        /// </summary>
+        /// <param name="db"></param>
         private void UpdateScrollListData(DataAccess db)
         {
             MemberList_ComboBox.Items.Clear();
@@ -356,6 +412,15 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Updates the persons information that will be update in SQL
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        /// <param name="i">for-loop index.</param>
+        /// <param name="YOB">Year of birth.</param>
+        /// <param name="YOD">Year of death.</param>
+        /// <param name="momId">Mothers id#.</param>
+        /// <param name="dadId">Fathers id#.</param>
         private void UpdatePersonInformation(DataAccess dataAccess, int i, int YOB, int YOD, int momId, int dadId)
         {
             people[i].FullName = TextBoxName.Text;
@@ -368,6 +433,11 @@ namespace FamilyTree
             people = dataAccess.Update(people[i]);
         }
 
+        /// <summary>
+        /// Finds the mother and returns their id#.
+        /// </summary>
+        /// <param name="i">for-loop index.</param>
+        /// <returns>Found mother id#.</returns>
         private int GetMotherId(int i)
         {
             int momId = default;
@@ -386,6 +456,11 @@ namespace FamilyTree
             return momId;
         }
 
+        /// <summary>
+        /// Finds the father and returns their id#.
+        /// </summary>
+        /// <param name="i">for-loop index.</param>
+        /// <returns>Found father id#.</returns>
         private int GetFatherId(int i)
         {
             int dadId = default;
@@ -404,6 +479,10 @@ namespace FamilyTree
             return dadId;
         }
 
+        /// <summary>
+        /// Gets the 
+        /// </summary>
+        /// <param name="insertedList"></param>
         private void GetParentNamesForRelatives(List<Person> insertedList)
         {
             for (int i = 0; i < insertedList.Count; i++)
@@ -422,6 +501,10 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Gets mothers and fathers name using their id# to the persons in the inserted list.
+        /// </summary>
+        /// <param name="insertedList">List for persons that need name for their parents.</param>
         public void GetMotherAndFatherNameFromID(List<Person> insertedList)
         {
             for (int i = 0; i < people.Count; i++)

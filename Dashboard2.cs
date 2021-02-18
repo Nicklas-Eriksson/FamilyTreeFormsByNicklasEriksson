@@ -66,7 +66,6 @@ namespace FamilyTree
             InitializeComponent();
         }
 
-
         private void Dashboard2_Load(object sender, EventArgs e)
         {
 
