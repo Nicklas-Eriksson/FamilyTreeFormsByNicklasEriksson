@@ -51,26 +51,51 @@ namespace FamilyTree
 
         private void InsertButton_Click(object sender, EventArgs e)
         {
-            DataAccess DA = new DataAccess();
+            DataAccess dataAccess = new DataAccess();
             var add = AddUpdateDelete_ComboBox.SelectedIndex == 0;
             var update = AddUpdateDelete_ComboBox.SelectedIndex == 1;
             var delete = AddUpdateDelete_ComboBox.SelectedIndex == 2;
 
             if (add)
             {
-                AddNewMember(DA);
+                AddNewMember(dataAccess);
             }
             else if (update)
             {
-                //UpdateMember(db);
+                UpdateMember(dataAccess);
             }
-            else if (delete) //Delete
+            else if (delete)
             {
-                DeleteMember(DA);
+                DeleteMember(dataAccess);
             }
         }
+        
+        private void UpdateMember(DataAccess dataAccess)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                {
+                    dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
-        private void DeleteMember(DataAccess db)
+
+
+                    people[i].FullName = TextBoxName.Text;
+                    people[i].YearOfBirth = TextBoxYearOfBirth.Text;
+                    people[i].PlaceOfBirth = TextBoxPlaceOfBirth.Text;
+                    people[i].MotherId = TextBoxMother.Text;
+                    people[i].FatherId = TextBoxFather.Text;
+                    people[i].GetYearOfDeath = TextBoxYearOfDeath.Text;
+                    people[i].PlaceOfDeath = TextBoxPlaceOfDeath.Text;
+                    people = dataAccess.Update(people[i]);
+                    break;
+                }
+            }
+
+            UpdateScrollListMembers(dataAccess);
+        }
+
+        private void DeleteMember(DataAccess dataAccess)
         {
             for (int i = 0; i < people.Count; i++)
             {
@@ -81,12 +106,12 @@ namespace FamilyTree
                 }
             }
 
-            UpdateScrollListMembers(db);
+            UpdateScrollListMembers(dataAccess);
         }
 
         private void AddNewMember(DataAccess dataAccess)
         {
-            //Full Name, Year of birth, Place of birth, Mother name, Father name, Year of death, Place of death
+            //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
             dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
             people = dataAccess.GetAll();
@@ -312,39 +337,39 @@ namespace FamilyTree
             new Dashboard2().Show();
         }
 
-        //Cant delete these.. Will throw error
-        private void Dashboard_Load(object sender, EventArgs e) { }
-        private void pictureBox1_Click(object sender, EventArgs e) { }
-        private void label1_Click(object sender, EventArgs e) { }
-        private void label2_Click(object sender, EventArgs e) { }
-        private void AddNewFamilyMemberLabel_Click(object sender, EventArgs e) { }
-        private void NameInsLabel_Click(object sender, EventArgs e) { }
-        private void label7_Click(object sender, EventArgs e) { }
-        private void label8_Click(object sender, EventArgs e) { }
-        private void FatherInsLabel_Click(object sender, EventArgs e) { }
-        private void label12_Click(object sender, EventArgs e) { }
-        private void label13_Click(object sender, EventArgs e) { }
-        private void label14_Click(object sender, EventArgs e) { }
-        private void DisplayNameLabel_Click(object sender, EventArgs e) { }
-        private void YearOfBirthInsLabel_Click(object sender, EventArgs e) { }
-        private void PeopleFoundListBox_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void SearchText_TextChanged(object sender, EventArgs e) { }
-        private void listBox2_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void ListBoxYOB_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void PlaceOfBirthInsLabel_Click(object sender, EventArgs e) { }
-        private void MotherInsLabel_Click(object sender, EventArgs e) { }
-        private void YearOfDeathInsLabel_Click(object sender, EventArgs e) { }
-        private void PlaceOfDeathInsLabel_Click(object sender, EventArgs e) { }
-        private void TextBoxPlaceOfDeath_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxYearOfDeath_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxFather_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxMother_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxPlaceOfBith_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxYearOfBirth_TextChanged(object sender, EventArgs e) { }
-        private void TextBoxName_TextChanged(object sender, EventArgs e) { }
-        private void SearchMenu_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
-        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
+        ////Cant delete these.. Will throw error
+        //private void Dashboard_Load(object sender, EventArgs e) { }
+        //private void pictureBox1_Click(object sender, EventArgs e) { }
+        //private void label1_Click(object sender, EventArgs e) { }
+        //private void label2_Click(object sender, EventArgs e) { }
+        //private void AddNewFamilyMemberLabel_Click(object sender, EventArgs e) { }
+        //private void NameInsLabel_Click(object sender, EventArgs e) { }
+        //private void label7_Click(object sender, EventArgs e) { }
+        //private void label8_Click(object sender, EventArgs e) { }
+        //private void FatherInsLabel_Click(object sender, EventArgs e) { }
+        //private void label12_Click(object sender, EventArgs e) { }
+        //private void label13_Click(object sender, EventArgs e) { }
+        //private void label14_Click(object sender, EventArgs e) { }
+        //private void DisplayNameLabel_Click(object sender, EventArgs e) { }
+        //private void YearOfBirthInsLabel_Click(object sender, EventArgs e) { }
+        //private void PeopleFoundListBox_SelectedIndexChanged(object sender, EventArgs e) { }
+        //private void SearchText_TextChanged(object sender, EventArgs e) { }
+        //private void listBox2_SelectedIndexChanged(object sender, EventArgs e) { }
+        //private void ListBoxYOB_SelectedIndexChanged(object sender, EventArgs e) { }
+        //private void PlaceOfBirthInsLabel_Click(object sender, EventArgs e) { }
+        //private void MotherInsLabel_Click(object sender, EventArgs e) { }
+        //private void YearOfDeathInsLabel_Click(object sender, EventArgs e) { }
+        //private void PlaceOfDeathInsLabel_Click(object sender, EventArgs e) { }
+        //private void TextBoxPlaceOfDeath_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxYearOfDeath_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxFather_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxMother_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxPlaceOfBith_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxYearOfBirth_TextChanged(object sender, EventArgs e) { }
+        //private void TextBoxName_TextChanged(object sender, EventArgs e) { }
+        //private void SearchMenu_SelectedIndexChanged(object sender, EventArgs e) { }
+        //private void listBox1_SelectedIndexChanged(object sender, EventArgs e) { }
+        //private void AddUpdateDelete_Text_Click(object sender, EventArgs e) { }
+        //private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
     }
 }

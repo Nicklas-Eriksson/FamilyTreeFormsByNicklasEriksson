@@ -76,6 +76,15 @@ namespace FamilyTree
             }
         }
 
+        internal List<Person> Update(Person person)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                var DynamicObject = new DynamicParameters(person);
+                return connection.Query<Person>("dbo.People_UpdatePerson @id, @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", DynamicObject).ToList();
+            }
+        }
+
         internal List<Person> AddMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
