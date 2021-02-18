@@ -416,7 +416,7 @@ namespace FamilyTree
             this.NewDB_Button.TabIndex = 42;
             this.NewDB_Button.Text = "New Database";
             this.NewDB_Button.UseVisualStyleBackColor = true;
-            this.NewDB_Button.Click += new System.EventHandler(this.button1_Click);
+            this.NewDB_Button.Click += new System.EventHandler(this.CodeSandboxButton_Click);
             // 
             // SearchMenu
             // 

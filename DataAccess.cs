@@ -53,26 +53,14 @@ namespace FamilyTree
         //    }
         //}
 
-        internal List<Person> GetRelativesByName(string name, string relative)
+        internal List<Person> GetRelativesByName(string name)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 var DynamicObject = new DynamicParameters(new Person { FullName = name });
                 List<Person> fullList = new List<Person>();
 
-                if (relative == "siblings")
-                {
-                    fullList = connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
-                }
-                else if (relative == "parents")
-                {
-                    fullList = connection.Query<Person>("dbo.People_FindParents @fullName", DynamicObject).ToList();
-                }
-                else if (relative == "kids")
-                {
-                    fullList = connection.Query<Person>("dbo.People_FindKids @fullName", DynamicObject).ToList();
-                }
-                return fullList;
+                return connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
             }
         }
 
