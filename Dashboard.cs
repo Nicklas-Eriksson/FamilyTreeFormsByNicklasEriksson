@@ -231,35 +231,33 @@ namespace FamilyTree
         /// </summary>
         private void FindCousins()
         {
+            var DA = new DataAccess();
             var cousinList = new List<Person>();
             var parentsSiblings = new List<Person>();
 
-            cousinList.Clear();
-            parentsSiblings.Clear();
-            foundPerson.Clear();
-            parents.Clear();
-
+            ClearLists(cousinList, parentsSiblings);
             FoundSearchedPerson();
-            var DA = new DataAccess();
             people = DA.GetAll();
+            GetParents();
+            GetAuntsAndUncles(DA, parentsSiblings);
+            GetCousins(cousinList, parentsSiblings);            
+            GetParentsNames(cousinList);
+            DisplayInfoToListBoxes(cousinList);
+        }
 
-            for (int i = 0; i < people.Count; i++)
+        private void RemoveSearchedPersonFromCousinList(List<Person> cousinList)
+        {
+            for (int i = 0; i < cousinList.Count; i++)
             {
-                if (foundPerson[0].MotherId == people[i].Id)
+                if (foundPerson[0].Id == cousinList[i].Id)
                 {
-                    parents.Add(people[i]);
-                }
-                else if (foundPerson[0].FatherId == people[i].Id)
-                {
-                    parents.Add(people[i]);
+                    cousinList.Remove(cousinList[i]);
                 }
             }
+        }
 
-            foreach (var parent in parents)
-            {
-                parentsSiblings.AddRange(DA.GetRelativesByName(parent.FullName));
-            }
-
+        private void GetCousins(List<Person> cousinList, List<Person> parentsSiblings)
+        {
             for (int j = 0; j < parentsSiblings.Count; j++)
             {
                 for (int k = 0; k < people.Count; k++)
@@ -275,16 +273,39 @@ namespace FamilyTree
                 }
             }
 
-            for (int i = 0; i < cousinList.Count; i++)
+            RemoveSearchedPersonFromCousinList(cousinList);
+            RemoveSearchedPersonFromCousinList(cousinList);
+        }
+
+        private void GetAuntsAndUncles(DataAccess DA, List<Person> parentsSiblings)
+        {
+            foreach (var parent in parents)
             {
-                if (foundPerson[0].Id == cousinList[i].Id)
+                parentsSiblings.AddRange(DA.GetRelativesByName(parent.FullName));
+            }
+        }
+
+        private void GetParents()
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (foundPerson[0].MotherId == people[i].Id)
                 {
-                    cousinList.Remove(cousinList[i]);
+                    parents.Add(people[i]);
+                }
+                else if (foundPerson[0].FatherId == people[i].Id)
+                {
+                    parents.Add(people[i]);
                 }
             }
+        }
 
-            GetParentsNames(cousinList);
-            DisplayInfoToListBoxes(cousinList);
+        private void ClearLists(List<Person> cousinList, List<Person> parentsSiblings)
+        {
+            cousinList.Clear();
+            parentsSiblings.Clear();
+            foundPerson.Clear();
+            parents.Clear();
         }
 
         /// <summary>
@@ -362,6 +383,18 @@ namespace FamilyTree
         {
             if (TextBoxName.Text != "")
             {
+                //var textBoxInputList = new List<string>();
+                //textBoxInputList.Add(TextBoxName.Text);
+                //textBoxInputList.Add(TextBoxYearOfBirth.Text);
+                //textBoxInputList.Add(TextBoxPlaceOfBirth.Text);
+                //textBoxInputList.Add(TextBoxMother.Text);
+                //textBoxInputList.Add(TextBoxFather.Text);
+                //textBoxInputList.Add(TextBoxYearOfDeath.Text);
+                //textBoxInputList.Add(TextBoxPlaceOfDeath.Text);
+
+                //if(textBoxInputList.Contains )
+
+
                 //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
                 dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 

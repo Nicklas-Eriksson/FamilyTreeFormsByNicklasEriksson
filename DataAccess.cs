@@ -143,7 +143,7 @@ namespace FamilyTree
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 var newDashboard = new Dashboard();
-                List<Person> populatedList = populatedList = newDashboard.people;
+                List<Person> people = newDashboard.people;
                 List<Person> newPersonToDataBase = new List<Person>();
                 bool motherSuccess = false, fatherSuccess = false;
                 bool success;
@@ -152,28 +152,10 @@ namespace FamilyTree
                 success = Int32.TryParse(_yearOfBirth, out YOBint);
                 success = Int32.TryParse(_yearOfDeath, out YODint);
 
-                momId = newDashboard.GetParentsId(_motherName, populatedList);
-                dadId = newDashboard.GetParentsId(_fatherName, populatedList);
-
-                //if (_motherName != null)
-                //{
-                //    momId = FindMotherId(_motherName, momId, populatedList);
-                //}
-                //else
-                //{
-                //    momId = 0;
-                //}
-
-                //if (_motherName != null)
-                //{
-                //    dadId = FindFatherId(_fatherName, momId, populatedList);
-                //}
-                //else
-                //{
-                //    dadId = 0;
-                //}
-
-                Person nP = new Person
+                momId = newDashboard.GetParentsId(_motherName, people);
+                dadId = newDashboard.GetParentsId(_fatherName, people);
+                              
+                Person newPerson = new Person
                 {
                     FullName = _fullName.Trim(), //string
                     YearOfBirth = YOBint, //converted to int
@@ -184,9 +166,12 @@ namespace FamilyTree
                     PlaceOfDeath = _placeOfDeath.Trim() //string
                 };
 
-                if (!populatedList.Contains(nP))
+                bool contains = people.Contains(newPerson);
+                if (!contains)
                 {
-                    newPersonToDataBase.Add(nP);
+                    newPersonToDataBase.Clear();
+                    newPersonToDataBase.Add(newPerson);
+                    people.Add(newPerson);
                     connection.Execute("dbo.People_Insert @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPersonToDataBase);
                 }
             }
@@ -214,47 +199,6 @@ namespace FamilyTree
                 var DynamicObject = new DynamicParameters(person);
                 connection.Execute(@"dbo.People_Delete @fullName", DynamicObject);
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="_fatherName"></param>
-        /// <param name="dadId"></param>
-        /// <param name="populatedList"></param>
-        /// <returns></returns>
-        private static int FindFatherId(string _fatherName, int dadId, List<Person> populatedList)
-        {
-            for (int i = 0; i < populatedList.Count; i++)
-            {
-                if (populatedList[i].FullName == _fatherName)
-                {
-                    dadId = populatedList[i].Id;
-                    break;
-                }
-                else
-                {
-                    dadId = 0;
-                }
-            }
-            return dadId;
-        }
-
-        internal static int FindMotherId(string _motherName, int momId, List<Person> populatedList)
-        {       
-            for (int i = 0; i < populatedList.Count; i++)
-            {
-                if (populatedList[i].FullName == _motherName)
-                {
-                    momId = populatedList[i].Id;
-                    break;
-                }
-                else
-                {
-                    momId = 0;
-                }
-            }
-            return momId;
         }
     }
 }
