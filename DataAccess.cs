@@ -8,6 +8,11 @@ namespace FamilyTree
 {
     public class DataAccess
     {
+        #region Overloaded GetAll()
+        /// <summary>
+        /// Retrieves all people from the SQL-database.
+        /// </summary>
+        /// <returns>List of Persons.</returns>
         internal List<Person> GetAll()
         {
             //Reference to Dapper, via nugget   
@@ -21,6 +26,12 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Retrieves all people from the SQL-database.
+        /// Used if you need to search every one in database using LIKE % %.
+        /// </summary>
+        /// <param name="input">Search box input that is used for the LIKE search.</param>
+        /// <returns>List of Persons.</returns>
         internal List<Person> GetAll(string input)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -29,10 +40,11 @@ namespace FamilyTree
                 var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
                 var queryList = connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
 
-                new Dashboard().GetMotherAndFatherNameFromID(queryList);
+                new Dashboard().GetParentsNames(queryList);
                 return queryList;
             }
         }
+        #endregion Overloaded GetAll()
 
         //internal string SQLSandbox(string input)
         //{
@@ -52,17 +64,25 @@ namespace FamilyTree
         //    }
         //}
 
+        /// <summary>
+        /// Searches the SQL-database for siblings using name from person being searched for. Requires full name.
+        /// </summary>
+        /// <param name="name">Name for the person that the data base will find siblings for.</param>
+        /// <returns>List of Persons, returns list with siblings.</returns>
         internal List<Person> GetRelativesByName(string name)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                var DynamicObject = new DynamicParameters(new Person { FullName = name });
-                List<Person> fullList = new List<Person>();
-
+                var DynamicObject = new DynamicParameters(new Person { FullName = name });               
                 return connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
             }
         }
 
+        /// <summary>
+        /// Takes in a person, converts it to a "Dynamic Parameter" that gets inserted into SQL to be updated in the SQL-database.
+        /// </summary>
+        /// <param name="person">Takes in a person that will be updated in DB.</param>
+        /// <returns>List of Persons.</returns>
         internal List<Person> Update(Person person)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -72,6 +92,10 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Inserts a number of persons to act as mock data for the family tree project.
+        /// </summary>
+        /// <returns>List of persons.</returns>
         internal List<Person> AddMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -80,6 +104,9 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// After mock data has been added to the database it gets updated so that parent connections will be set correctly. Parents ID# is linked to the dbo.Person ID# that is the tables primary key.
+        /// </summary>
         internal void AlterMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -88,6 +115,9 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Remakes the table dbo.Person so that the ID# counter will be reset.
+        /// </summary>
         internal void RemakeTable()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -97,6 +127,17 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Inserts a new member to the database so it can be stored in the SQL-server.
+        /// The method takes in parents names, but thereafter they get converted to their ID# number and sent into the database.
+        /// </summary>
+        /// <param name="_fullName">Full name.</param>
+        /// <param name="_yearOfBirth">Year of birth.</param>
+        /// <param name="_birthPlace">Birth place.</param>
+        /// <param name="_motherName">Mothers name.</param>
+        /// <param name="_fatherName">Fathers name.</param>
+        /// <param name="_yearOfDeath">Year of death.</param>
+        /// <param name="_placeOfDeath">Place of death-</param>
         internal void AddNewPerson(string _fullName, string _yearOfBirth, string _birthPlace, string _motherName, string _fatherName, string _yearOfDeath, string _placeOfDeath)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -111,23 +152,26 @@ namespace FamilyTree
                 success = Int32.TryParse(_yearOfBirth, out YOBint);
                 success = Int32.TryParse(_yearOfDeath, out YODint);
 
-                if (_motherName != null)
-                {
-                    momId = FindMotherId(_motherName, momId, populatedList);
-                }
-                else
-                {
-                    momId = 0;
-                }
+                momId = newDashboard.GetParentsId(_motherName, populatedList);
+                dadId = newDashboard.GetParentsId(_fatherName, populatedList);
 
-                if (_motherName != null)
-                {
-                    dadId = FindFatherId(_fatherName, momId, populatedList);
-                }
-                else
-                {
-                    dadId = 0;
-                }
+                //if (_motherName != null)
+                //{
+                //    momId = FindMotherId(_motherName, momId, populatedList);
+                //}
+                //else
+                //{
+                //    momId = 0;
+                //}
+
+                //if (_motherName != null)
+                //{
+                //    dadId = FindFatherId(_fatherName, momId, populatedList);
+                //}
+                //else
+                //{
+                //    dadId = 0;
+                //}
 
                 Person nP = new Person
                 {
@@ -148,6 +192,9 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// Wipes the dbo.People table clean. So that it can be inserted anew.
+        /// </summary>
         internal void DeleteAllFromTable()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -156,6 +203,10 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// If a person is deleted from the program it will also remove that person from the SQL-database.
+        /// </summary>
+        /// <param name="person"></param>
         internal static void Delete(Person person)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
@@ -165,6 +216,13 @@ namespace FamilyTree
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_fatherName"></param>
+        /// <param name="dadId"></param>
+        /// <param name="populatedList"></param>
+        /// <returns></returns>
         private static int FindFatherId(string _fatherName, int dadId, List<Person> populatedList)
         {
             for (int i = 0; i < populatedList.Count; i++)
@@ -183,7 +241,7 @@ namespace FamilyTree
         }
 
         internal static int FindMotherId(string _motherName, int momId, List<Person> populatedList)
-        {
+        {       
             for (int i = 0; i < populatedList.Count; i++)
             {
                 if (populatedList[i].FullName == _motherName)

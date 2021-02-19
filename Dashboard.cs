@@ -5,13 +5,16 @@ using System.Windows.Forms;
 namespace FamilyTree
 {
     public partial class Dashboard : Form
-    {        
+    {
+        #region Field contains Lists
         internal List<Person> people = new List<Person>();
         private List<Person> foundPerson = new List<Person>();
         private List<Person> siblings = new List<Person>();
         private List<Person> parents = new List<Person>();
         private List<Person> kids = new List<Person>();
-        
+        #endregion Field
+
+        #region Initialize forms
         /// <summary>
         /// Initializing components and adds members from SQL-DB to display in the scroll list for Add/Update/delete.
         /// </summary>
@@ -20,7 +23,9 @@ namespace FamilyTree
             InitializeComponent();
             UpdateScrollListData(new DataAccess());
         }
+        #endregion Initialize forms
 
+        #region Button_Clicks
         /// <summary>
         /// Press the reset button to restore the database with the "mock data".
         /// </summary>
@@ -32,7 +37,7 @@ namespace FamilyTree
             people = MD.ResetData(people);
             GetParentNamesForRelatives(people);
         }
-                
+
         /// <summary>
         /// Depending on what you chose from the combo box you can Add/Update/Delete a member to or from the SQL server.
         /// </summary>
@@ -41,9 +46,9 @@ namespace FamilyTree
         private void Ok_Button_Click(object sender, EventArgs e)
         {
             DataAccess dataAccess = new DataAccess();
-            var add = Search_ComboBox.SelectedIndex == 0;
-            var update = Search_ComboBox.SelectedIndex == 1;
-            var delete = Search_ComboBox.SelectedIndex == 2;
+            var add = AddUpdateDelete_ComboBox.SelectedIndex == 0;
+            var update = AddUpdateDelete_ComboBox.SelectedIndex == 1;
+            var delete = AddUpdateDelete_ComboBox.SelectedIndex == 2;
 
             if (add)
             {
@@ -82,12 +87,14 @@ namespace FamilyTree
             ResetListBoxes();
             TypeOfSearch();
         }
+        #endregion Button_Clicks
 
+        #region Search functions
         /// <summary>
         /// Lets you decide what type of search you want.
         /// </summary>
         public void TypeOfSearch()
-        {            
+        {
             if (Search_ComboBox.SelectedIndex == 0)
             {
                 NormalSearch();
@@ -115,15 +122,15 @@ namespace FamilyTree
         }
 
         /// <summary>
-        /// Searches in the sql server using LIKE % % to get your search results.
+        /// Searches in the SQL-server using LIKE % % to get your search results.
         /// </summary>
         private void NormalSearch()
         {
             foundPerson.Clear();
             people = new DataAccess().GetAll();
             FoundSearchedPerson();
-           GetMotherAndFatherNameFromID(people);
-            DisplayInfoFromList(foundPerson);
+            GetParentsNames(people);
+            DisplayInfoToListBoxes(foundPerson);
         }
 
         /// <summary>
@@ -132,7 +139,7 @@ namespace FamilyTree
         private void FindAll()
         {
             var db = new DataAccess();
-           people.Clear();
+            people.Clear();
             MemberList_ComboBox.Items.Clear();
             people = db.GetAll();
 
@@ -141,8 +148,8 @@ namespace FamilyTree
                 MemberList_ComboBox.Items.Add(person.FullName);
             }
 
-            GetMotherAndFatherNameFromID(people);
-            DisplayInfoFromList(people);
+            GetParentsNames(people);
+            DisplayInfoToListBoxes(people);
         }
 
         /// <summary>
@@ -163,9 +170,9 @@ namespace FamilyTree
                     insertedList.Remove(insertedList[i]);
                 }
             }
-            GetMotherAndFatherNameFromID(people);
+            GetParentsNames(people);
             GetParentNamesForRelatives(insertedList);
-            DisplayInfoFromList(insertedList);
+            DisplayInfoToListBoxes(insertedList);
         }
 
         /// <summary>
@@ -190,8 +197,8 @@ namespace FamilyTree
                 }
             }
 
-            GetMotherAndFatherNameFromID(people);
-            DisplayInfoFromList(kids);
+            GetParentsNames(people);
+            DisplayInfoToListBoxes(kids);
         }
 
         /// <summary>
@@ -215,8 +222,8 @@ namespace FamilyTree
                 }
             }
 
-            GetMotherAndFatherNameFromID(people);
-            DisplayInfoFromList(parents);
+            GetParentsNames(people);
+            DisplayInfoToListBoxes(parents);
         }
 
         /// <summary>
@@ -276,8 +283,8 @@ namespace FamilyTree
                 }
             }
 
-            GetMotherAndFatherNameFromID(cousinList);
-            DisplayInfoFromList(cousinList);
+            GetParentsNames(cousinList);
+            DisplayInfoToListBoxes(cousinList);
         }
 
         /// <summary>
@@ -288,14 +295,16 @@ namespace FamilyTree
             var DA = new DataAccess();
             string input = SearchText.Text;
             foundPerson = DA.GetAll(input);
-            GetMotherAndFatherNameFromID(foundPerson);
+            GetParentsNames(foundPerson);
         }
+        #endregion Search functions
 
+        #region Insert and reset list boxes
         /// <summary>
         /// Populates the list boxes so they can display information.
         /// </summary>
         /// <param name="insertedList">Insert the list that you want to display</param>
-        public void DisplayInfoFromList(List<Person> insertedList)
+        public void DisplayInfoToListBoxes(List<Person> insertedList)
         {
             ListBoxName.DataSource = insertedList;
             ListBoxName.DisplayMember = "GetFullName";
@@ -323,7 +332,7 @@ namespace FamilyTree
         /// Clears the list boxes so that they can display other information than before.
         /// </summary>
         private void ResetListBoxes()
-        {            
+        {
             ListBoxName.DataSource = null;
             ListBoxName.Items.Clear();
             ListBoxYOB.DataSource = null;
@@ -338,22 +347,27 @@ namespace FamilyTree
             ListBoxYOD.Items.Clear();
             ListBoxPOD.DataSource = null;
             ListBoxPOD.Items.Clear();
-                        
+
             foundPerson.Clear();
             people.Clear();
         }
+        #endregion Insert and reset list boxes
 
+        #region CRUD methods
         /// <summary>
-        /// Creates a new person object and populates it with info from the textboxes that are bein filled in. Thereafter that person is being inserted into SQL.
+        /// Creates a new person object and populates it with info from the text boxes that are being filled in. Thereafter that person is being inserted into SQL.
         /// </summary>
         /// <param name="dataAccess"></param>
         private void AddNewMember(DataAccess dataAccess)
         {
-            //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
-            dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+            if (TextBoxName.Text != "")
+            {
+                //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
+                dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
-            people = dataAccess.GetAll();
-            FindParents();
+                people = dataAccess.GetAll();
+                FindParents();
+            }            
         }
 
         /// <summary>
@@ -362,18 +376,21 @@ namespace FamilyTree
         /// <param name="dataAccess"></param>
         private void UpdateMember(DataAccess dataAccess)
         {
-            for (int i = 0; i < people.Count; i++)
+            if (MemberList_ComboBox.SelectedItem != null)
             {
-                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                for (int i = 0; i < people.Count; i++)
                 {
-                    bool success;
-                    success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
-                    success = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
-                    int momId = GetMotherId(i);
-                    int dadId = GetFatherId(i);
-                    UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
-                    UpdateScrollListData(dataAccess);
-                    break;
+                    if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                    {
+                        bool success;
+                        success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
+                        success = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
+                        int momId = GetParentsId(TextBoxMother.Text.ToString(), people);
+                        int dadId = GetParentsId(TextBoxFather.Text.ToString(), people);
+                        UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
+                        UpdateScrollListData(dataAccess);
+                        break;
+                    }
                 }
             }
         }
@@ -384,17 +401,20 @@ namespace FamilyTree
         /// <param name="dataAccess"></param>
         private void DeleteMember(DataAccess dataAccess)
         {
-            for (int i = 0; i < people.Count; i++)
+            if (MemberList_ComboBox.SelectedItem != null)
             {
-                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                for (int i = 0; i < people.Count; i++)
                 {
-                    DataAccess.Delete(people[i]);
-                    break;
+                    if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                    {
+                        DataAccess.Delete(people[i]);
+                        break;
+                    }
                 }
-            }
 
-            UpdateScrollListData(dataAccess);
-        }       
+                UpdateScrollListData(dataAccess);
+            }
+        }
 
         /// <summary>
         /// Updates the scrollable list that displays all members in the database if there has been a change.
@@ -432,51 +452,30 @@ namespace FamilyTree
             people[i].PlaceOfDeath = TextBoxPlaceOfDeath.Text;
             people = dataAccess.Update(people[i]);
         }
+        #endregion CRUD methods
 
+        #region Get id# or name methods
         /// <summary>
-        /// Finds the mother and returns their id#.
+        /// Finds the parents ID# and returns it.
         /// </summary>
-        /// <param name="i">for-loop index.</param>
+        /// <param name="i">Parent name as a string + a list to use in for-loop.</param>
         /// <returns>Found mother id#.</returns>
-        private int GetMotherId(int i)
+        public int GetParentsId(string _parentName, List<Person> _people)
         {
-            int momId = default;
+            int parentId = default;
 
-            if (TextBoxMother.Text.ToString() != "")
+            if (_parentName != "")
             {
-                for (int j = 0; i < people.Count; j++)
+                for (int j = 0; j < _people.Count; j++)
                 {
-                    if (TextBoxMother.Text == people[j].FullName)
+                    if (_parentName == _people[j].FullName)
                     {
-                        return people[j].Id;
+                        return _people[j].Id;
                     }
                 }
             }
 
-            return momId;
-        }
-
-        /// <summary>
-        /// Finds the father and returns their id#.
-        /// </summary>
-        /// <param name="i">for-loop index.</param>
-        /// <returns>Found father id#.</returns>
-        private int GetFatherId(int i)
-        {
-            int dadId = default;
-
-            if (TextBoxFather.Text.ToString() != "")
-            {
-                for (int j = 0; i < people.Count; j++)
-                {
-                    if (TextBoxFather.Text == people[j].FullName)
-                    {
-                        return people[j].Id;
-                    }
-                }
-            }
-
-            return dadId;
+            return parentId;
         }
 
         /// <summary>
@@ -488,7 +487,7 @@ namespace FamilyTree
             for (int i = 0; i < insertedList.Count; i++)
             {
                 for (int j = 0; j < people.Count; j++)
-                {                    
+                {
                     if (people[j].Id == insertedList[i].MotherId)
                     {
                         insertedList[i].MotherName = people[j].FullName;
@@ -505,7 +504,7 @@ namespace FamilyTree
         /// Gets mothers and fathers name using their id# to the persons in the inserted list.
         /// </summary>
         /// <param name="insertedList">List for persons that need name for their parents.</param>
-        public void GetMotherAndFatherNameFromID(List<Person> insertedList)
+        public void GetParentsNames(List<Person> insertedList)
         {
             for (int i = 0; i < people.Count; i++)
             {
@@ -522,5 +521,6 @@ namespace FamilyTree
                 }
             }
         }
+        #endregion Get id# or name methods
     }
 }

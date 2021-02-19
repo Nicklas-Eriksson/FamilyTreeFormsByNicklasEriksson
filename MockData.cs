@@ -11,7 +11,7 @@ namespace FamilyTree
             DA.RemakeTable();
             people = DA.AddMockData();
             DA.AlterMockData();
-            DB.GetMotherAndFatherNameFromID(people);
+            DB.GetParentsNames(people);
 
             return people;
         }
