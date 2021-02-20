@@ -22,6 +22,7 @@ namespace FamilyTree
         {
             InitializeComponent();
             RestoreDataBase();
+            GetParentsNames(people);
         }
         #endregion Initialize forms
 
