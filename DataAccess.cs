@@ -102,12 +102,24 @@ namespace FamilyTree
         /// </summary>
         internal void RemakeTable()
         {
+            DropTable();
+            CreateTable();
+        }
+        internal void CreateTable()
+        {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                connection.Execute("DROP TABLE dbo.People");
                 connection.Execute("dbo.People_CreateTablePeople");
             }
         }
+        internal void DropTable()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Execute("DROP TABLE dbo.People");
+            }
+        }
+
 
         /// <summary>
         /// Inserts a new member to the database so it can be stored in the SQL-server.

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 
 namespace FamilyTree
 {
     internal class MockData
     {
+        internal string conString { get; set; } = @"Server =.\SQLEXPRESS; Integrated Security = SSPI;";
+
         internal List<Person> GetData(List<Person> people)
         {
             var DA = new DataAccess();
-            bool dbExists = CheckDatabaseExists(Utility.Cnn("FamilyTreeDB"), "FamilyTree_NicklasEriksson");
+            bool dbExists = CheckDatabaseExists(conString, "FamilyTree_NicklasEriksson");
             string createDB = "CREATE DATABASE FamilyTree_NicklasEriksson;";
 
             if (dbExists)
@@ -20,7 +23,8 @@ namespace FamilyTree
             }
             else
             {
-                SqlConnection connect = new SqlConnection(Utility.Cnn("FamilyTreeDB"));
+                //SqlConnection connect = new SqlConnection(Utility.Cnn("FamilyTreeDB"));              
+                SqlConnection connect = new SqlConnection(conString);              
                 SqlCommand cmd = new SqlCommand();
                 try
                 {
@@ -29,6 +33,9 @@ namespace FamilyTree
                     cmd.CommandText = createDB;
                     cmd.ExecuteNonQuery();
                     AddStoredProcedures();
+                    DA.CreateTable();
+                    people = DA.AddMockData();
+                    DA.AlterMockData();
                 }
                 catch
                 {
@@ -37,9 +44,6 @@ namespace FamilyTree
                 finally
                 {
                     connect.Close();
-                    DA.RemakeTable();
-                    people = DA.AddMockData();
-                    DA.AlterMockData();
                 }
             }
             return people;
@@ -54,7 +58,7 @@ namespace FamilyTree
             SP.InsertMockData();
             SP.AlterMockData();
             SP.CreateTablePeople();
-            SP.Delete();
+            SP.DeletePerson();
             SP.EmptyTable();
             SP.FindSiblings();
             SP.Insert();
@@ -67,6 +71,8 @@ namespace FamilyTree
         {
             using (var connection = new SqlConnection(connectionString))
             {
+                //@"SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name = N'" +DatabaseName + "' "
+                //using (var command = new SqlCommand(@"SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name = N'" + databaseName + "' ", connection))
                 using (var command = new SqlCommand($"SELECT db_id('{databaseName}')", connection))
                 {
                     connection.Open();
@@ -255,11 +261,11 @@ VALUES(	'Eva Öström', 1953, 'Kiruna', null, null, 2020, 'Kiruna'
             }
             finally
             {
-                connect.Close();               
+                connect.Close();
             }
         }
 
-        internal void AlterMockData() 
+        internal void AlterMockData()
         {
             #region alterMD
             string alterMD = @"CREATE PROCEDURE [dbo].[People_AlterMockData]
@@ -372,11 +378,11 @@ WHERE id = 1 -- Britt-Inger
             }
             finally
             {
-                connect.Close();              
+                connect.Close();
             }
         }
 
-        internal void CreateTablePeople() 
+        internal void CreateTablePeople()
         {
             #region Stored procedure createTablePeople
             string createTablePeople = @"CREATE PROCEDURE [dbo].[People_CreateTablePeople]
@@ -417,7 +423,7 @@ END";
             }
         }
 
-        internal void Delete() 
+        internal void DeletePerson()
         {
             #region Stored procedure createTablePeople
             string delete = @"CREATE PROCEDURE [dbo].[People_Delete]
@@ -432,7 +438,7 @@ END";
             {
                 connect.Open();
                 cmd.Connection = connect;
-                cmd.CommandText =  delete = @"ALTER PROCEDURE [dbo].[People_Delete]
+                cmd.CommandText = delete = @"CREATE PROCEDURE [dbo].[People_Delete]
 @fullName VARCHAR(40)
 AS
 BEGIN
@@ -452,7 +458,7 @@ END";
             }
         }
 
-        internal void EmptyTable() 
+        internal void EmptyTable()
         {
             #region Stored procedure createTablePeople
             string emptyTable = @"CREATE PROCEDURE [dbo].[People_EmptyTable]
@@ -479,7 +485,7 @@ END
             }
         }
 
-        internal void FindSiblings() 
+        internal void FindSiblings()
         {
             #region Stored procedure createTablePeople
             string findSiblings = @"CREATE PROCEDURE [dbo].[People_FindSiblings]
@@ -517,11 +523,10 @@ END";
             }
         }
 
-        internal void Insert() 
+        internal void Insert()
         {
             #region Stored procedure createTablePeople
             string insert = @"CREATE PROCEDURE [dbo].[People_Insert]
-	--@id int,
 	@fullName nvarchar(40),
 	@yearOfBirth int = NULL,
 	@placeOfBirth nvarchar(40) = NULL,
@@ -534,8 +539,7 @@ BEGIN
 	SET NOCOUNT ON
 
 	INSERT INTO dbo.People
-	(
-	 --id,
+	(	 
 	 fullName,
 	 yearOfBirth,
 	 placeOfBirth,
@@ -545,8 +549,7 @@ BEGIN
 	 placeOfDeath
 	)
 	VALUES
-	(
-		--@id,
+	(		
 		@fullName,
 		@yearOfBirth,
 		@placeOfBirth,
@@ -574,7 +577,7 @@ END";
             }
         }
 
-        internal void SearchLIKE() 
+        internal void SearchLIKE()
         {
             #region Stored procedure createTablePeople
             string searchLike = @"CREATE PROCEDURE [dbo].[People_SearchLIKE]
@@ -607,7 +610,7 @@ END";
             }
         }
 
-        internal void UpdatePerson() 
+        internal void UpdatePerson()
         {
             #region Stored procedure createTablePeople
             string updatePerson = @"CREATE PROCEDURE [dbo].[People_UpdatePerson]
@@ -649,7 +652,7 @@ END";
             }
         }
 
-        internal void GetAll() 
+        internal void GetAll()
         {
             #region Stored procedure createTablePeople
             string getAll = @"CREATE PROCEDURE [dbo].[spPeople_GetAll]
