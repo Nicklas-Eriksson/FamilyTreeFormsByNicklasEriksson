@@ -16,13 +16,13 @@ namespace FamilyTree
 
         #region Initialize forms
         /// <summary>
-        /// Initializing components and adds members from SQL-DB to display in the scroll list for Add/Update/delete.
+        /// Initializing components for forms window and checks if the database that will be in use exists or not.
+        /// If it does not exist it gets created along with stored procedures and tables.
         /// </summary>
         public Dashboard()
         {
             InitializeComponent();
-            RestoreDataBase();
-            GetParentsNames(people);
+            new MockData().InitializeData();
         }
         #endregion Initialize forms
 
@@ -35,6 +35,24 @@ namespace FamilyTree
         private void ResetDB_Button_Click(object sender, EventArgs e)
         {
             RestoreDataBase();
+        }
+
+        /// <summary>
+        /// If the index of the MemberList  combo box changes the TextBoxes will be filled in with the chosen member.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                {
+                    GetParentsNames(people[i]);
+                    FillTextBoxWith(people[i]);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -195,6 +213,7 @@ namespace FamilyTree
             parents.Clear();
             people = new DataAccess().GetAll();
             FoundSearchedPerson();
+            GetParentsNames(people);
 
             for (int i = 0; i < people.Count; i++)
             {
@@ -208,7 +227,6 @@ namespace FamilyTree
                 }
             }
 
-            GetParentsNames(people);
             DisplayInfoToListBoxes(parents);
         }
 
@@ -373,6 +391,7 @@ namespace FamilyTree
                 dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
                 people = dataAccess.GetAll();
+                GetParentsNames(people);
                 FindParents();
             }
 
@@ -585,31 +604,20 @@ namespace FamilyTree
             }
         }
         #endregion Get id# or name methods
-
+              
         /// <summary>
-        /// If the index of the MemberList  combo box changes the TextBoxes will be filled in with the chosen member.
+        /// When the "Restore Database" button is pressed it resets to the preset mock data.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            for (int i = 0; i < people.Count; i++)
-            {
-                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
-                {
-                    GetParentsNames(people[i]);
-                    FillTextBoxWith(people[i]);
-                    break;
-                }
-            }
-        }
-
         private void RestoreDataBase()
         {
-            people = new MockData().GetData(people);
-            UpdateScrollListData(new DataAccess());
+            var DA = new DataAccess();
+            DA.RemakeTable();
+            DA.AddMockData();
+            DA.AlterMockData();
+            people = DA.GetAll();
+            UpdateScrollListData(DA);
             ResetListBoxes();
-            GetParentNamesForRelatives(people);
+            GetParentsNames(people);
         }
     }
 }

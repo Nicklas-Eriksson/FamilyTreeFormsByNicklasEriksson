@@ -120,7 +120,6 @@ namespace FamilyTree
             }
         }
 
-
         /// <summary>
         /// Inserts a new member to the database so it can be stored in the SQL-server.
         /// The method takes in parents names, but thereafter they get converted to their ID# number and sent into the database.

@@ -9,21 +9,17 @@ namespace FamilyTree
     {
         internal string conString { get; set; } = @"Server =.\SQLEXPRESS; Integrated Security = SSPI;";
 
-        internal List<Person> GetData(List<Person> people)
+        /// <summary>
+        /// Checks if database exists, if it does not it creates it along with stored procedures and tables.
+        /// </summary>
+        internal void InitializeData()
         {
             var DA = new DataAccess();
             bool dbExists = CheckDatabaseExists(conString, "FamilyTree_NicklasEriksson");
             string createDB = "CREATE DATABASE FamilyTree_NicklasEriksson;";
 
-            if (dbExists)
-            {
-                DA.RemakeTable();
-                people = DA.AddMockData();
-                DA.AlterMockData();
-            }
-            else
-            {
-                //SqlConnection connect = new SqlConnection(Utility.Cnn("FamilyTreeDB"));              
+            if (!dbExists)
+            { 
                 SqlConnection connect = new SqlConnection(conString);              
                 SqlCommand cmd = new SqlCommand();
                 try
@@ -33,9 +29,7 @@ namespace FamilyTree
                     cmd.CommandText = createDB;
                     cmd.ExecuteNonQuery();
                     AddStoredProcedures();
-                    DA.CreateTable();
-                    people = DA.AddMockData();
-                    DA.AlterMockData();
+                    DA.CreateTable();                    
                 }
                 catch
                 {
@@ -46,7 +40,6 @@ namespace FamilyTree
                     connect.Close();
                 }
             }
-            return people;
         }
 
         /// <summary>
@@ -70,9 +63,7 @@ namespace FamilyTree
         internal static bool CheckDatabaseExists(string connectionString, string databaseName)
         {
             using (var connection = new SqlConnection(connectionString))
-            {
-                //@"SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name = N'" +DatabaseName + "' "
-                //using (var command = new SqlCommand(@"SELECT COUNT(*) FROM master.dbo.sysdatabases WHERE name = N'" + databaseName + "' ", connection))
+            {               
                 using (var command = new SqlCommand($"SELECT db_id('{databaseName}')", connection))
                 {
                     connection.Open();
