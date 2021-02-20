@@ -21,7 +21,7 @@ namespace FamilyTree
         public Dashboard()
         {
             InitializeComponent();
-            UpdateScrollListData(new DataAccess());
+            RestoreDataBase();
         }
         #endregion Initialize forms
 
@@ -33,9 +33,7 @@ namespace FamilyTree
         /// <param name="e"></param>
         private void ResetDB_Button_Click(object sender, EventArgs e)
         {
-            var MD = new MockData();
-            people = MD.ResetData(people);
-            GetParentNamesForRelatives(people);
+            RestoreDataBase();
         }
 
         /// <summary>
@@ -62,19 +60,6 @@ namespace FamilyTree
             {
                 DeleteMember(dataAccess);
             }
-        }
-
-        /// <summary>
-        /// This button takes you to another forms window where you can create some SQL tables for fun.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CodeSandboxButton_Click(object sender, EventArgs e)
-        {
-            UserControl control = new UserControl();
-            control.Dock = DockStyle.Fill;
-            this.Controls.Add(control);
-            new Dashboard2().Show();
         }
 
         /// <summary>
@@ -240,7 +225,7 @@ namespace FamilyTree
             people = DA.GetAll();
             GetParents();
             GetAuntsAndUncles(DA, parentsSiblings);
-            GetCousins(cousinList, parentsSiblings);            
+            GetCousins(cousinList, parentsSiblings);
             GetParentsNames(cousinList);
             DisplayInfoToListBoxes(cousinList);
         }
@@ -383,24 +368,15 @@ namespace FamilyTree
         {
             if (TextBoxName.Text != "")
             {
-                //var textBoxInputList = new List<string>();
-                //textBoxInputList.Add(TextBoxName.Text);
-                //textBoxInputList.Add(TextBoxYearOfBirth.Text);
-                //textBoxInputList.Add(TextBoxPlaceOfBirth.Text);
-                //textBoxInputList.Add(TextBoxMother.Text);
-                //textBoxInputList.Add(TextBoxFather.Text);
-                //textBoxInputList.Add(TextBoxYearOfDeath.Text);
-                //textBoxInputList.Add(TextBoxPlaceOfDeath.Text);
-
-                //if(textBoxInputList.Contains )
-
-
                 //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
                 dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
                 people = dataAccess.GetAll();
                 FindParents();
-            }            
+            }
+
+            UpdateScrollListData(dataAccess);
+            CRUDTextBoxClear();
         }
 
         /// <summary>
@@ -422,10 +398,43 @@ namespace FamilyTree
                         int dadId = GetParentsId(TextBoxFather.Text.ToString(), people);
                         UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
                         UpdateScrollListData(dataAccess);
+
                         break;
                     }
                 }
+
+                UpdateScrollListData(dataAccess);
+                CRUDTextBoxClear();
             }
+        }
+
+        /// <summary>
+        /// After the comboBox changes its index the TextBoxes will be filled with the information from the chosen member.
+        /// </summary>
+        /// <param name="selectedPerson">Person that will fill up the TextBoxes.</param>
+        private void FillTextBoxWith(Person selectedPerson)
+        {
+            TextBoxName.Text = selectedPerson.FullName;
+            TextBoxYearOfBirth.Text = selectedPerson.YearOfBirth.ToString();
+            TextBoxPlaceOfBirth.Text = selectedPerson.PlaceOfBirth;
+            TextBoxMother.Text = selectedPerson.MotherName;
+            TextBoxFather.Text = selectedPerson.FatherName;
+            TextBoxYearOfDeath.Text = selectedPerson.YearOfDeath.ToString();
+            TextBoxPlaceOfDeath.Text = selectedPerson.PlaceOfDeath;
+        }
+
+        /// <summary>
+        /// Clears the TextBoxes after they have been used.
+        /// </summary>
+        private void CRUDTextBoxClear()
+        {
+            TextBoxName.Clear();
+            TextBoxYearOfBirth.Clear();
+            TextBoxPlaceOfBirth.Clear();
+            TextBoxMother.Clear();
+            TextBoxFather.Clear();
+            TextBoxYearOfDeath.Clear();
+            TextBoxPlaceOfDeath.Clear();
         }
 
         /// <summary>
@@ -446,6 +455,7 @@ namespace FamilyTree
                 }
 
                 UpdateScrollListData(dataAccess);
+                CRUDTextBoxClear();
             }
         }
 
@@ -554,6 +564,51 @@ namespace FamilyTree
                 }
             }
         }
+
+        /// <summary>
+        /// Overloaded from method above
+        /// </summary>
+        /// <param name="insertedPerson">Person that need names for parents.</param>
+        public void GetParentsNames(Person insertedPerson)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (insertedPerson.MotherId == people[i].Id)
+                {
+                    insertedPerson.MotherName = people[i].FullName;
+                }
+                else if (insertedPerson.FatherId == people[i].Id)
+                {
+                    insertedPerson.FatherName = people[i].FullName;
+                }
+            }
+        }
         #endregion Get id# or name methods
+
+        /// <summary>
+        /// If the index of the MemberList  combo box changes the TextBoxes will be filled in with the chosen member.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MemberList_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (MemberList_ComboBox.SelectedItem.ToString() == people[i].FullName)
+                {
+                    GetParentsNames(people[i]);
+                    FillTextBoxWith(people[i]);
+                    break;
+                }
+            }
+        }
+
+        private void RestoreDataBase()
+        {
+            people = new MockData().GetData(people);
+            UpdateScrollListData(new DataAccess());
+            ResetListBoxes();
+            GetParentNamesForRelatives(people);
+        }
     }
 }

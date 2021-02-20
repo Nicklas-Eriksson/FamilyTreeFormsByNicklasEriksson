@@ -45,25 +45,7 @@ namespace FamilyTree
             }
         }
         #endregion Overloaded GetAll()
-
-        //internal string SQLSandbox(string input)
-        //{
-        //    using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB"))) //Make another DB for sandbox
-        //    {               
-        //        //try
-        //        //{
-        //        //    var QuaryResults = connection.Query($"{input}").ToString();
-        //        //    return QuaryResults;
-        //        //}
-        //        //catch
-        //        //{
-        //        //    var DA = new Dashboard();
-        //        //    string emptyString = "";
-        //        //    return emptyString;
-        //        //}
-        //    }
-        //}
-
+                
         /// <summary>
         /// Searches the SQL-database for siblings using name from person being searched for. Requires full name.
         /// </summary>
@@ -73,7 +55,7 @@ namespace FamilyTree
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                var DynamicObject = new DynamicParameters(new Person { FullName = name });               
+                var DynamicObject = new DynamicParameters(new Person { FullName = name });
                 return connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
             }
         }
@@ -99,7 +81,7 @@ namespace FamilyTree
         internal List<Person> AddMockData()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {                
+            {
                 return connection.Query<Person>("dbo.People_InsertMockData").ToList();
             }
         }
@@ -154,7 +136,7 @@ namespace FamilyTree
 
                 momId = newDashboard.GetParentsId(_motherName, people);
                 dadId = newDashboard.GetParentsId(_fatherName, people);
-                              
+
                 Person newPerson = new Person
                 {
                     FullName = _fullName.Trim(), //string
@@ -166,7 +148,15 @@ namespace FamilyTree
                     PlaceOfDeath = _placeOfDeath.Trim() //string
                 };
 
-                bool contains = people.Contains(newPerson);
+                bool contains = false;
+                for (int i = 0; i < people.Count; i++)
+                {
+                    if (newPerson.FullName == people[i].FullName)
+                    {
+                        contains = true;
+                    }
+                }
+
                 if (!contains)
                 {
                     newPersonToDataBase.Clear();

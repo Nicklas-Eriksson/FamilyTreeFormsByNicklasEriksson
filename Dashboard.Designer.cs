@@ -66,7 +66,6 @@ namespace FamilyTree
             this.ListBoxPOD = new System.Windows.Forms.ListBox();
             this.SearchLabel = new System.Windows.Forms.Label();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
-            this.NewDB_Button = new System.Windows.Forms.Button();
             this.Search_ComboBox = new System.Windows.Forms.ComboBox();
             this.AddUpdateDelete_ComboBox = new System.Windows.Forms.ComboBox();
             this.MemberList_ComboBox = new System.Windows.Forms.ComboBox();
@@ -185,6 +184,7 @@ namespace FamilyTree
             // TextBoxName
             // 
             this.TextBoxName.Location = new System.Drawing.Point(156, 493);
+            this.TextBoxName.Multiline = true;
             this.TextBoxName.Name = "TextBoxName";
             this.TextBoxName.Size = new System.Drawing.Size(249, 29);
             this.TextBoxName.TabIndex = 16;
@@ -408,16 +408,6 @@ namespace FamilyTree
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 41;
             // 
-            // NewDB_Button
-            // 
-            this.NewDB_Button.Location = new System.Drawing.Point(440, 13);
-            this.NewDB_Button.Name = "NewDB_Button";
-            this.NewDB_Button.Size = new System.Drawing.Size(167, 28);
-            this.NewDB_Button.TabIndex = 42;
-            this.NewDB_Button.Text = "SQL Sandbox";
-            this.NewDB_Button.UseVisualStyleBackColor = true;
-            this.NewDB_Button.Click += new System.EventHandler(this.CodeSandboxButton_Click);
-            // 
             // Search_ComboBox
             // 
             this.Search_ComboBox.BackColor = System.Drawing.Color.White;
@@ -458,6 +448,7 @@ namespace FamilyTree
             this.MemberList_ComboBox.Name = "MemberList_ComboBox";
             this.MemberList_ComboBox.Size = new System.Drawing.Size(249, 32);
             this.MemberList_ComboBox.TabIndex = 46;
+            this.MemberList_ComboBox.SelectedIndexChanged += new System.EventHandler(this.MemberList_ComboBox_SelectedIndexChanged);
             // 
             // AddUpdateDelete_Text
             // 
@@ -472,7 +463,7 @@ namespace FamilyTree
             // 
             // ResetDB_Button
             // 
-            this.ResetDB_Button.Location = new System.Drawing.Point(440, 47);
+            this.ResetDB_Button.Location = new System.Drawing.Point(440, 9);
             this.ResetDB_Button.Name = "ResetDB_Button";
             this.ResetDB_Button.Size = new System.Drawing.Size(167, 28);
             this.ResetDB_Button.TabIndex = 48;
@@ -491,7 +482,6 @@ namespace FamilyTree
             this.Controls.Add(this.MemberList_ComboBox);
             this.Controls.Add(this.AddUpdateDelete_ComboBox);
             this.Controls.Add(this.Search_ComboBox);
-            this.Controls.Add(this.NewDB_Button);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.ListBoxPOD);
             this.Controls.Add(this.ListBoxYOD);
@@ -577,7 +567,6 @@ namespace FamilyTree
         private System.Windows.Forms.ListBox ListBoxPOD;
         private System.Windows.Forms.Label SearchLabel;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
-        private System.Windows.Forms.Button NewDB_Button;
         public System.Windows.Forms.ComboBox Search_ComboBox;
         private System.Windows.Forms.ComboBox AddUpdateDelete_ComboBox;
         internal System.Windows.Forms.ComboBox MemberList_ComboBox;
