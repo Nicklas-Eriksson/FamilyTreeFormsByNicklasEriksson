@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 
 namespace FamilyTree
 {
     internal class MockData
     {
-        internal string conString { get; set; } = @"Server =.\SQLEXPRESS; Integrated Security = SSPI;";
+        internal string ConString { get;} = @"Server =.\SQLEXPRESS; Integrated Security = SSPI;";
 
         /// <summary>
         /// Checks if database exists, if it does not it creates it along with stored procedures and tables.
@@ -15,12 +13,12 @@ namespace FamilyTree
         internal void InitializeData()
         {
             var DA = new DataAccess();
-            bool dbExists = CheckDatabaseExists(conString, "FamilyTree_NicklasEriksson");
+            bool dbExists = CheckDatabaseExists(ConString, "FamilyTree_NicklasEriksson");
             string createDB = "CREATE DATABASE FamilyTree_NicklasEriksson;";
 
             if (!dbExists)
             { 
-                SqlConnection connect = new SqlConnection(conString);              
+                SqlConnection connect = new SqlConnection(ConString);              
                 SqlCommand cmd = new SqlCommand();
                 try
                 {
@@ -52,7 +50,6 @@ namespace FamilyTree
             SP.AlterMockData();
             SP.CreateTablePeople();
             SP.DeletePerson();
-            SP.EmptyTable();
             SP.FindSiblings();
             SP.Insert();
             SP.SearchLIKE();
@@ -73,6 +70,9 @@ namespace FamilyTree
         }
     }
 
+    /// <summary>
+    /// During the programs first run the stored procedures below gets executed so that they can be used during the rest of the program.
+    /// </summary>
     internal class SetUpStoredProcedures
     {
         SqlConnection connect = new SqlConnection(Utility.Cnn("FamilyTreeDB"));
@@ -429,41 +429,7 @@ END";
             {
                 connect.Open();
                 cmd.Connection = connect;
-                cmd.CommandText = delete = @"CREATE PROCEDURE [dbo].[People_Delete]
-@fullName VARCHAR(40)
-AS
-BEGIN
-DELETE FROM People
-WHERE fullName = @fullname
-END";
-                ;
-                cmd.ExecuteNonQuery();
-            }
-            catch
-            {
-                connect.Close();
-            }
-            finally
-            {
-                connect.Close();
-            }
-        }
-
-        internal void EmptyTable()
-        {
-            #region Stored procedure createTablePeople
-            string emptyTable = @"CREATE PROCEDURE [dbo].[People_EmptyTable]
-AS
-BEGIN
-DELETE  FROM dbo.People
-END
-";
-            #endregion Stored procedure createTablePeople
-            try
-            {
-                connect.Open();
-                cmd.Connection = connect;
-                cmd.CommandText = emptyTable;
+                cmd.CommandText = delete;                
                 cmd.ExecuteNonQuery();
             }
             catch

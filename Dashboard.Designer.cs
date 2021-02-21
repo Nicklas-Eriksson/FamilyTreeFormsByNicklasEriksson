@@ -482,7 +482,6 @@ namespace FamilyTree
             this.comboBoxMother.Name = "comboBoxMother";
             this.comboBoxMother.Size = new System.Drawing.Size(249, 32);
             this.comboBoxMother.TabIndex = 49;
-            this.comboBoxMother.SelectedIndexChanged += new System.EventHandler(this.comboBoxMother_SelectedIndexChanged);
             // 
             // comboBoxFather
             // 
@@ -493,7 +492,6 @@ namespace FamilyTree
             this.comboBoxFather.Name = "comboBoxFather";
             this.comboBoxFather.Size = new System.Drawing.Size(249, 32);
             this.comboBoxFather.TabIndex = 50;
-            this.comboBoxFather.SelectedIndexChanged += new System.EventHandler(this.comboBoxFather_SelectedIndexChanged);
             // 
             // Dashboard
             // 

@@ -369,7 +369,23 @@ namespace FamilyTree
         }
         #endregion Search functions
 
-        #region Insert and reset list boxes
+        #region Update list boxes and restore database
+
+        /// <summary>
+        /// When the "Restore Database" button is pressed it resets to the preset mock data.
+        /// </summary>
+        private void RestoreDatabase()
+        {
+            var DA = new DataAccess();
+            DA.RemakeTable();
+            DA.AddMockData();
+            DA.AlterMockData();
+            people = DA.GetAll();
+            UpdateScrollListData(DA);
+            ResetListBoxes();
+            GetParentsNamesFrom(people);
+        }
+
         /// <summary>
         /// Populates the list boxes so they can display information.
         /// </summary>
@@ -650,31 +666,6 @@ namespace FamilyTree
                 }
             }
         }
-        #endregion Get id# or name methods
-
-        /// <summary>
-        /// When the "Restore Database" button is pressed it resets to the preset mock data.
-        /// </summary>
-        private void RestoreDatabase()
-        {
-            var DA = new DataAccess();
-            DA.RemakeTable();
-            DA.AddMockData();
-            DA.AlterMockData();
-            people = DA.GetAll();
-            UpdateScrollListData(DA);
-            ResetListBoxes();
-            GetParentsNamesFrom(people);
-        }
-
-        private void comboBoxMother_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void comboBoxFather_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
+        #endregion Get id# or name methods                
     }
 }

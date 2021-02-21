@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace FamilyTree
 {
+    /// <summary>
+    /// The Person object is what will be sent and received from the database.
+    /// </summary>
     public class Person : IPersonable
     {
         public int Id { get; set; }

@@ -8,118 +8,10 @@ namespace FamilyTree
 {
     public class DataAccess
     {
-        #region Overloaded GetAll()
-        /// <summary>
-        /// Retrieves all people from the SQL-database.
-        /// </summary>
-        /// <returns>List of Persons.</returns>
-        internal List<Person> GetAll()
-        {
-            //Reference to Dapper, via nugget   
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                //This one is prone to SQL injection
-                //return connection.Query<Person>($"select * from People where fullName = '{name}'").ToList();
+       
 
-                //This one is safer
-                return connection.Query<Person>("dbo.spPeople_GetAll").ToList();
-            }
-        }
-
-        /// <summary>
-        /// Retrieves one person from the SQL-database if it matches with the search result.
-        /// Used if you need to search every one in database using LIKE % %.
-        /// </summary>
-        /// <param name="input">Search box input that is used for the LIKE search.</param>
-        /// <returns>List of Persons.</returns>
-        internal List<Person> GetAll(string input)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                //The Person object needs to contain "SearchInput" so that it can be exactly matched against the SQL databases "@SearchInput", otherwise it will cast a "must declare the scalar variable"-error.
-                var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
-                var queryList = connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
-
-                new Dashboard().GetParentsNamesFrom(queryList);
-                return queryList;
-            }
-        }
-        #endregion Overloaded GetAll()
-                
-        /// <summary>
-        /// Searches the SQL-database for siblings using name from person being searched for. Requires full name.
-        /// </summary>
-        /// <param name="name">Name for the person that the data base will find siblings for.</param>
-        /// <returns>List of Persons, returns list with siblings.</returns>
-        internal List<Person> GetRelativesByName(string name)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                var DynamicObject = new DynamicParameters(new Person { FullName = name });
-                return connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Takes in a person, converts it to a "Dynamic Parameter" that gets inserted into SQL to be updated in the SQL-database.
-        /// </summary>
-        /// <param name="person">Takes in a person that will be updated in DB.</param>
-        /// <returns>List of Persons.</returns>
-        internal List<Person> Update(Person person)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                var DynamicObject = new DynamicParameters(person);
-                return connection.Query<Person>("dbo.People_UpdatePerson @id, @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", DynamicObject).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Inserts a number of persons to act as mock data for the family tree project.
-        /// </summary>
-        /// <returns>List of persons.</returns>
-        internal List<Person> AddMockData()
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                return connection.Query<Person>("dbo.People_InsertMockData").ToList();
-            }
-        }
-
-        /// <summary>
-        /// After mock data has been added to the database it gets updated so that parent connections will be set correctly. Parents ID# is linked to the dbo.Person ID# that is the tables primary key.
-        /// </summary>
-        internal void AlterMockData()
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                connection.Execute("dbo.People_AlterMockData");
-            }
-        }
-
-        /// <summary>
-        /// Remakes the table dbo.Person so that the ID# counter will be reset.
-        /// </summary>
-        internal void RemakeTable()
-        {
-            DropTable();
-            CreateTable();
-        }
-        internal void CreateTable()
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                connection.Execute("dbo.People_CreateTablePeople");
-            }
-        }
-        internal void DropTable()
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
-            {
-                connection.Execute("DROP TABLE dbo.People");
-            }
-        }
-
+        #region Add / Update / Delete Person
+        #region Add Person
         /// <summary>
         /// Inserts a new member to the database so it can be stored in the SQL-server.
         /// The method takes in parents names, but thereafter they get converted to their ID# number and sent into the database.
@@ -181,7 +73,7 @@ namespace FamilyTree
             }
 
             if (!contains)
-            {                
+            {
                 connection.Execute("dbo.People_Insert @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPerson);
                 people.Add(newPerson);
                 return people;
@@ -189,18 +81,23 @@ namespace FamilyTree
 
             return people;
         }
-
+        #endregion Add  Person
+        #region Update Person
         /// <summary>
-        /// Wipes the dbo.People table clean. So that it can be inserted anew.
+        /// Takes in a person, converts it to a "Dynamic Parameter" that gets inserted into SQL to be updated in the SQL-database.
         /// </summary>
-        internal void DeleteAllFromTable()
+        /// <param name="person">Takes in a person that will be updated in DB.</param>
+        /// <returns>List of Persons.</returns>
+        internal List<Person> Update(Person person)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
-                connection.Execute("dbo.People_EmptyTable");
+                var DynamicObject = new DynamicParameters(person);
+                return connection.Query<Person>("dbo.People_UpdatePerson @id, @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", DynamicObject).ToList();
             }
         }
-
+        #endregion Update Person
+        #region Delete Person
         /// <summary>
         /// If a person is deleted from the program it will also remove that person from the SQL-database.
         /// </summary>
@@ -213,5 +110,118 @@ namespace FamilyTree
                 connection.Execute(@"dbo.People_Delete @fullName", DynamicObject);
             }
         }
+        #endregion Delete Person
+        #endregion Add / Update / Delete
+
+        #region Stored search procedures
+        /// <summary>
+        /// Searches the SQL-database for siblings using name from person being searched for. Requires full name.
+        /// </summary>
+        /// <param name="name">Name for the person that the data base will find siblings for.</param>
+        /// <returns>List of Persons, returns list with siblings.</returns>
+        internal List<Person> GetRelativesByName(string name)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                var DynamicObject = new DynamicParameters(new Person { FullName = name });
+                return connection.Query<Person>("dbo.People_FindSiblings @fullName", DynamicObject).ToList();
+            }
+        }
+        #region Overloaded GetAll()
+        /// <summary>
+        /// Retrieves all people from the SQL-database.
+        /// </summary>
+        /// <returns>List of Persons.</returns>
+        internal List<Person> GetAll()
+        {
+            //Reference to Dapper, via nugget   
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                //This one is prone to SQL injection
+                //return connection.Query<Person>($"select * from People where fullName = '{name}'").ToList();
+
+                //This one is safer
+                return connection.Query<Person>("dbo.spPeople_GetAll").ToList();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves one person from the SQL-database if it matches with the search result.
+        /// Used if you need to search every one in database using LIKE % %.
+        /// </summary>
+        /// <param name="input">Search box input that is used for the LIKE search.</param>
+        /// <returns>List of Persons.</returns>
+        internal List<Person> GetAll(string input)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                //The Person object needs to contain "SearchInput" so that it can be exactly matched against the SQL databases "@SearchInput", otherwise it will cast a "must declare the scalar variable"-error.
+                var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
+                var queryList = connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
+
+                new Dashboard().GetParentsNamesFrom(queryList);
+                return queryList;
+            }
+        }
+        #endregion Overloaded GetAll()
+        #endregion Stored search procedures
+
+        #region Mockdata
+        /// <summary>
+        /// Inserts a number of persons to act as mock data for the family tree project.
+        /// </summary>
+        /// <returns>List of persons.</returns>
+        internal List<Person> AddMockData()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                return connection.Query<Person>("dbo.People_InsertMockData").ToList();
+            }
+        }
+
+        /// <summary>
+        /// After mock data has been added to the database it gets updated so that parent connections will be set correctly. Parents ID# is linked to the dbo.Person ID# that is the tables primary key.
+        /// </summary>
+        internal void AlterMockData()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Execute("dbo.People_AlterMockData");
+            }
+        }
+        #endregion Mockdata
+
+        #region Remake/Create/Drop tables
+        /// <summary>
+        /// Remakes the table dbo.Person so that the ID# counter will be reset.
+        /// </summary>
+        internal void RemakeTable()
+        {
+            DropTable();
+            CreateTable();
+        }
+
+        /// <summary>
+        /// Create new SQL-table.
+        /// </summary>
+        internal void CreateTable()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Execute("dbo.People_CreateTablePeople");
+            }
+        }
+
+        /// <summary>
+        /// Drops previous SQL-table.
+        /// </summary>
+        internal void DropTable()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
+            {
+                connection.Execute("DROP TABLE dbo.People");
+            }
+        }
+        #endregion Remake/Create/Drop tables    
     }
 }
