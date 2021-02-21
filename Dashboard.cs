@@ -35,7 +35,8 @@ namespace FamilyTree
         /// <param name="e"></param>
         private void ResetDB_Button_Click(object sender, EventArgs e)
         {
-            RestoreDataBase();
+            RestoreDatabase();
+            UpdateScrollListData(new DataAccess());
         }
 
         /// <summary>
@@ -131,14 +132,13 @@ namespace FamilyTree
         /// </summary>
         private void NormalSearch()
         {
-            if(SearchText.Text != "")
+            if (SearchText.Text != "")
             {
-                foundPerson.Clear();
                 people = new DataAccess().GetAll();
                 FoundSearchedPerson();
                 GetParentsNamesFrom(people);
                 DisplayInfoToListBoxes(foundPerson);
-            }            
+            }
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace FamilyTree
                     catch
                     {
                     }
-                    
+
                 }
 
             }
@@ -362,6 +362,7 @@ namespace FamilyTree
         private void FoundSearchedPerson()
         {
             var DA = new DataAccess();
+            foundPerson.Clear();
             string input = SearchText.Text;
             foundPerson = DA.GetAll(input);
             GetParentsNamesFrom(foundPerson);
@@ -456,15 +457,16 @@ namespace FamilyTree
                         bool success;
                         success = Int32.TryParse(TextBoxYearOfBirth.Text.Trim(), out int YOB);
                         success = Int32.TryParse(TextBoxYearOfDeath.Text.Trim(), out int YOD);
-                        int momId = GetParentsId(TextBoxMother.Text.ToString(), people);
-                        int dadId = GetParentsId(TextBoxFather.Text.ToString(), people);
+                        //int momId = GetParentsId(TextBoxMother.Text.ToString(), people);
+                        //int dadId = GetParentsId(TextBoxFather.Text.ToString(), people);
+                        int momId = GetParentsId(comboBoxMother.Text, people);
+                        int dadId = GetParentsId(comboBoxFather.Text, people);
                         UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
-                        CRUDTextBoxClear();
-
                         break;
                     }
                 }
 
+                CRUDTextBoxClear();
                 UpdateScrollListData(dataAccess);
             }
         }
@@ -477,9 +479,9 @@ namespace FamilyTree
         {
             TextBoxName.Text = selectedPerson.FullName;
             TextBoxYearOfBirth.Text = selectedPerson.YearOfBirth.ToString();
-            TextBoxPlaceOfBirth.Text = selectedPerson.PlaceOfBirth;
-            TextBoxMother.Text = selectedPerson.MotherName;
-            TextBoxFather.Text = selectedPerson.FatherName;
+            TextBoxPlaceOfBirth.Text = selectedPerson.PlaceOfBirth;            
+            comboBoxMother.Text = selectedPerson.MotherName;
+            comboBoxFather.Text = selectedPerson.FatherName;
             TextBoxYearOfDeath.Text = selectedPerson.YearOfDeath.ToString();
             TextBoxPlaceOfDeath.Text = selectedPerson.PlaceOfDeath;
         }
@@ -491,9 +493,9 @@ namespace FamilyTree
         {
             TextBoxName.Clear();
             TextBoxYearOfBirth.Clear();
-            TextBoxPlaceOfBirth.Clear();
-            TextBoxMother.Clear();
-            TextBoxFather.Clear();
+            TextBoxPlaceOfBirth.Clear();           
+            comboBoxMother.Items.Clear();
+            comboBoxFather.Items.Clear();
             TextBoxYearOfDeath.Clear();
             TextBoxPlaceOfDeath.Clear();
         }
@@ -515,8 +517,8 @@ namespace FamilyTree
                     }
                 }
 
-                UpdateScrollListData(dataAccess);
                 CRUDTextBoxClear();
+                UpdateScrollListData(dataAccess);
             }
         }
 
@@ -527,12 +529,16 @@ namespace FamilyTree
         private void UpdateScrollListData(DataAccess db)
         {
             MemberList_ComboBox.Items.Clear();
+            comboBoxMother.Items.Clear();
+            comboBoxFather.Items.Clear();
             people.Clear();
             people = db.GetAll();
 
             foreach (var person in people)
             {
                 MemberList_ComboBox.Items.Add(person.FullName);
+                comboBoxMother.Items.Add(person.FullName);
+                comboBoxFather.Items.Add(person.FullName);
             }
         }
 
@@ -649,7 +655,7 @@ namespace FamilyTree
         /// <summary>
         /// When the "Restore Database" button is pressed it resets to the preset mock data.
         /// </summary>
-        private void RestoreDataBase()
+        private void RestoreDatabase()
         {
             var DA = new DataAccess();
             DA.RemakeTable();
@@ -659,6 +665,16 @@ namespace FamilyTree
             UpdateScrollListData(DA);
             ResetListBoxes();
             GetParentsNamesFrom(people);
+        }
+
+        private void comboBoxMother_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void comboBoxFather_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
