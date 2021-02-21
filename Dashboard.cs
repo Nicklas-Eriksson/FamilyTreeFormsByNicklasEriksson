@@ -738,8 +738,7 @@ namespace FamilyTree
             }
         }
 
-        #endregion Get id# or name methods                
 
-        
+        #endregion Get id# or name methods                
     }
 }
