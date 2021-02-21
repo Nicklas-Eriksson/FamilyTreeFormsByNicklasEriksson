@@ -520,7 +520,7 @@ namespace FamilyTree
             if (TextBoxName.Text != "")
             {
                 //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
-                people = dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+                people = dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, comboBoxMother.Text, comboBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
                 GetParentsNamesFrom(people);
             }
@@ -737,6 +737,7 @@ namespace FamilyTree
                 }
             }
         }
+
         #endregion Get id# or name methods                
 
         

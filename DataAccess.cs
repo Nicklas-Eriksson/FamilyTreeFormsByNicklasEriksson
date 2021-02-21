@@ -7,9 +7,7 @@ using System.Data;
 namespace FamilyTree
 {
     public class DataAccess
-    {
-       
-
+    {      
         #region Add / Update / Delete Person
         #region Add Person
         /// <summary>
