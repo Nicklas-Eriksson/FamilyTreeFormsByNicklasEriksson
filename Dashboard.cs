@@ -121,12 +121,22 @@ namespace FamilyTree
             {
                 FindParents();
             }
+
             else if (Search_ComboBox.SelectedIndex == 5)
             {
-                FindCousins();
+                FindAuntsAndUncles();
             }
-        }
 
+            else if (Search_ComboBox.SelectedIndex == 6)
+            {
+                FindGrandparents();
+            }
+            else if (Search_ComboBox.SelectedIndex == 7)
+            {
+                FindCousins();
+            }            
+        }
+                
         /// <summary>
         /// Searches in the SQL-server using LIKE % % to get your search results.
         /// </summary>
@@ -247,6 +257,67 @@ namespace FamilyTree
             }
 
             DisplayInfoToListBoxes(parents);
+        }
+
+        /// <summary>
+        /// Clears lists and inserts grandparents information to listboxes.
+        /// </summary>
+        private void FindGrandparents()
+        {
+            var DA = new DataAccess();
+            var grandparents = new List<Person>();
+            grandparents.Clear();
+            parents.Clear();
+            FoundSearchedPerson();
+            people = DA.GetAll();
+            GetParents();
+            grandparents = GetGrandParents(parents);
+            GetParentsNamesFrom(grandparents);
+            DisplayInfoToListBoxes(grandparents);
+        }
+
+        /// <summary>
+        /// Finds search-persons parents > parents parents.
+        /// </summary>
+        /// <param name="parents">Insert list of search persons parents.</param>
+        /// <returns>List of grandparents.</returns>
+        private List<Person> GetGrandParents(List<Person> parents)
+        {
+            var grandparents = new List<Person>();
+            grandparents.Clear();
+            for (int i = 0; i < people.Count; i++)
+            {
+                for (int j = 0; j < parents.Count; j++)
+                {
+                    if (parents[j].MotherId == people[i].Id)
+                    {
+                        grandparents.Add(people[i]);
+                    }
+                    else if (parents[j].FatherId == people[i].Id)
+                    {
+                        grandparents.Add(people[i]);
+                    }
+                }
+            }
+            return grandparents;
+        }
+
+        /// <summary>
+        /// Finds parents > parents siblings.
+        /// </summary>
+        private void FindAuntsAndUncles()
+        {
+            var DA = new DataAccess();
+            var cousinList = new List<Person>();
+            var parentsSiblings = new List<Person>();
+
+            ClearLists(cousinList, parentsSiblings);
+            FoundSearchedPerson();
+            people = DA.GetAll();
+            GetParents();
+            GetAuntsAndUncles(DA, parentsSiblings);
+            GetParentsNamesFrom(parentsSiblings);
+            DisplayInfoToListBoxes(parentsSiblings);
         }
 
         /// <summary>

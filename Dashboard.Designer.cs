@@ -421,10 +421,12 @@ namespace FamilyTree
             "Find Siblings:",
             "Find Kids:",
             "Find Parents:",
+            "Find Aunts & Uncles:",
+            "Find Grandparents:",
             "Find Cousins:"});
-            this.Search_ComboBox.Location = new System.Drawing.Point(167, 9);
+            this.Search_ComboBox.Location = new System.Drawing.Point(122, 9);
             this.Search_ComboBox.Name = "Search_ComboBox";
-            this.Search_ComboBox.Size = new System.Drawing.Size(192, 32);
+            this.Search_ComboBox.Size = new System.Drawing.Size(237, 32);
             this.Search_ComboBox.TabIndex = 44;
             // 
             // AddUpdateDelete_ComboBox
