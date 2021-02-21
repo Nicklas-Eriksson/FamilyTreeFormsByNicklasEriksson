@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FamilyTree
+﻿namespace FamilyTree
 {
     /// <summary>
     /// The Person object is what will be sent and received from the database.
