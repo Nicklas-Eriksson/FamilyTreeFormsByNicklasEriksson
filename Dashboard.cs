@@ -23,6 +23,7 @@ namespace FamilyTree
         {
             InitializeComponent();
             new MockData().InitializeData();
+            UpdateScrollListData(new DataAccess());
         }
         #endregion Initialize forms
 
@@ -130,11 +131,14 @@ namespace FamilyTree
         /// </summary>
         private void NormalSearch()
         {
-            foundPerson.Clear();
-            people = new DataAccess().GetAll();
-            FoundSearchedPerson();
-            GetParentsNames(people);
-            DisplayInfoToListBoxes(foundPerson);
+            if(SearchText.Text != "")
+            {
+                foundPerson.Clear();
+                people = new DataAccess().GetAll();
+                FoundSearchedPerson();
+                GetParentsNamesFrom(people);
+                DisplayInfoToListBoxes(foundPerson);
+            }            
         }
 
         /// <summary>
@@ -152,7 +156,7 @@ namespace FamilyTree
                 MemberList_ComboBox.Items.Add(person.FullName);
             }
 
-            GetParentsNames(people);
+            GetParentsNamesFrom(people);
             DisplayInfoToListBoxes(people);
         }
 
@@ -169,12 +173,15 @@ namespace FamilyTree
 
             for (int i = 0; i < insertedList.Count; i++)
             {
-                if (foundPerson[0].Id == insertedList[i].Id)
+                for (int j = 0; j < foundPerson.Count; j++)
                 {
-                    insertedList.Remove(insertedList[i]);
+                    if (foundPerson[j].Id == insertedList[i].Id)
+                    {
+                        insertedList.Remove(insertedList[i]);
+                    }
                 }
             }
-            GetParentsNames(people);
+            GetParentsNamesFrom(people);
             GetParentNamesForRelatives(insertedList);
             DisplayInfoToListBoxes(insertedList);
         }
@@ -191,17 +198,26 @@ namespace FamilyTree
 
             for (int i = 0; i < people.Count; i++)
             {
-                if (people[i].MotherId == foundPerson[0].Id)
+                for (int k = 0; k < foundPerson.Count; k++)
                 {
-                    kids.Add(people[i]);
-                }
-                else if (people[i].FatherId == foundPerson[0].Id)
-                {
-                    kids.Add(people[i]);
+                    if (foundPerson[k].Id == people[i].Id)
+                    {
+                        for (int j = 0; j < people.Count; j++)
+                        {
+                            if (people[j].MotherId == foundPerson[k].Id)
+                            {
+                                kids.Add(people[j]);
+                            }
+                            else if (people[j].FatherId == foundPerson[k].Id)
+                            {
+                                kids.Add(people[j]);
+                            }
+                        }
+                    }
                 }
             }
 
-            GetParentsNames(people);
+            GetParentsNamesFrom(people);
             DisplayInfoToListBoxes(kids);
         }
 
@@ -213,17 +229,20 @@ namespace FamilyTree
             parents.Clear();
             people = new DataAccess().GetAll();
             FoundSearchedPerson();
-            GetParentsNames(people);
+            GetParentsNamesFrom(people);
 
             for (int i = 0; i < people.Count; i++)
             {
-                if (foundPerson[0].MotherId == people[i].Id)
+                for (int j = 0; j < foundPerson.Count; j++)
                 {
-                    parents.Add(people[i]);
-                }
-                else if (foundPerson[0].FatherId == people[i].Id)
-                {
-                    parents.Add(people[i]);
+                    if (foundPerson[j].MotherId == people[i].Id)
+                    {
+                        parents.Add(people[i]);
+                    }
+                    else if (foundPerson[j].FatherId == people[i].Id)
+                    {
+                        parents.Add(people[i]);
+                    }
                 }
             }
 
@@ -245,7 +264,7 @@ namespace FamilyTree
             GetParents();
             GetAuntsAndUncles(DA, parentsSiblings);
             GetCousins(cousinList, parentsSiblings);
-            GetParentsNames(cousinList);
+            GetParentsNamesFrom(cousinList);
             DisplayInfoToListBoxes(cousinList);
         }
 
@@ -253,10 +272,21 @@ namespace FamilyTree
         {
             for (int i = 0; i < cousinList.Count; i++)
             {
-                if (foundPerson[0].Id == cousinList[i].Id)
+                for (int j = 0; j < foundPerson.Count; j++)
                 {
-                    cousinList.Remove(cousinList[i]);
+                    try
+                    {
+                        if (foundPerson[j].Id == cousinList[i].Id)
+                        {
+                            cousinList.Remove(cousinList[i]);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    
                 }
+
             }
         }
 
@@ -287,19 +317,33 @@ namespace FamilyTree
             {
                 parentsSiblings.AddRange(DA.GetRelativesByName(parent.FullName));
             }
+
+            for (int i = 0; i < parents.Count; i++)
+            {
+                for (int j = 0; j < parentsSiblings.Count; j++)
+                {
+                    if (parentsSiblings[j].Id == parents[i].Id)
+                    {
+                        parentsSiblings.Remove(parentsSiblings[j]);
+                    }
+                }
+            }
         }
 
         private void GetParents()
         {
             for (int i = 0; i < people.Count; i++)
             {
-                if (foundPerson[0].MotherId == people[i].Id)
+                for (int j = 0; j < foundPerson.Count; j++)
                 {
-                    parents.Add(people[i]);
-                }
-                else if (foundPerson[0].FatherId == people[i].Id)
-                {
-                    parents.Add(people[i]);
+                    if (foundPerson[j].MotherId == people[i].Id)
+                    {
+                        parents.Add(people[i]);
+                    }
+                    else if (foundPerson[j].FatherId == people[i].Id)
+                    {
+                        parents.Add(people[i]);
+                    }
                 }
             }
         }
@@ -320,7 +364,7 @@ namespace FamilyTree
             var DA = new DataAccess();
             string input = SearchText.Text;
             foundPerson = DA.GetAll(input);
-            GetParentsNames(foundPerson);
+            GetParentsNamesFrom(foundPerson);
         }
         #endregion Search functions
 
@@ -388,11 +432,9 @@ namespace FamilyTree
             if (TextBoxName.Text != "")
             {
                 //Name, Year-/Place of birth, Mother-/Father name, Year-/Place of death
-                dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
+                people = dataAccess.AddNewPerson(TextBoxName.Text, TextBoxYearOfBirth.Text, TextBoxPlaceOfBirth.Text, TextBoxMother.Text, TextBoxFather.Text, TextBoxYearOfDeath.Text, TextBoxPlaceOfDeath.Text);
 
-                people = dataAccess.GetAll();
-                GetParentsNames(people);
-                FindParents();
+                GetParentsNamesFrom(people);
             }
 
             UpdateScrollListData(dataAccess);
@@ -417,14 +459,13 @@ namespace FamilyTree
                         int momId = GetParentsId(TextBoxMother.Text.ToString(), people);
                         int dadId = GetParentsId(TextBoxFather.Text.ToString(), people);
                         UpdatePersonInformation(dataAccess, i, YOB, YOD, momId, dadId);
-                        UpdateScrollListData(dataAccess);
+                        CRUDTextBoxClear();
 
                         break;
                     }
                 }
 
                 UpdateScrollListData(dataAccess);
-                CRUDTextBoxClear();
             }
         }
 
@@ -567,7 +608,7 @@ namespace FamilyTree
         /// Gets mothers and fathers name using their id# to the persons in the inserted list.
         /// </summary>
         /// <param name="insertedList">List for persons that need name for their parents.</param>
-        public void GetParentsNames(List<Person> insertedList)
+        public void GetParentsNamesFrom(List<Person> insertedList)
         {
             for (int i = 0; i < people.Count; i++)
             {
@@ -604,7 +645,7 @@ namespace FamilyTree
             }
         }
         #endregion Get id# or name methods
-              
+
         /// <summary>
         /// When the "Restore Database" button is pressed it resets to the preset mock data.
         /// </summary>
@@ -617,7 +658,7 @@ namespace FamilyTree
             people = DA.GetAll();
             UpdateScrollListData(DA);
             ResetListBoxes();
-            GetParentsNames(people);
+            GetParentsNamesFrom(people);
         }
     }
 }

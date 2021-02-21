@@ -27,7 +27,7 @@ namespace FamilyTree
         }
 
         /// <summary>
-        /// Retrieves all people from the SQL-database.
+        /// Retrieves one person from the SQL-database if it matches with the search result.
         /// Used if you need to search every one in database using LIKE % %.
         /// </summary>
         /// <param name="input">Search box input that is used for the LIKE search.</param>
@@ -40,7 +40,7 @@ namespace FamilyTree
                 var DynamicObject = new DynamicParameters(new Person { SearchInput = input });
                 var queryList = connection.Query<Person>("dbo.People_SearchLIKE @SearchInput", DynamicObject).ToList();
 
-                new Dashboard().GetParentsNames(queryList);
+                new Dashboard().GetParentsNamesFrom(queryList);
                 return queryList;
             }
         }
@@ -131,51 +131,63 @@ namespace FamilyTree
         /// <param name="_fatherName">Fathers name.</param>
         /// <param name="_yearOfDeath">Year of death.</param>
         /// <param name="_placeOfDeath">Place of death-</param>
-        internal void AddNewPerson(string _fullName, string _yearOfBirth, string _birthPlace, string _motherName, string _fatherName, string _yearOfDeath, string _placeOfDeath)
+        internal List<Person> AddNewPerson(string _fullName, string _yearOfBirth, string _birthPlace, string _motherName, string _fatherName, string _yearOfDeath, string _placeOfDeath)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Utility.Cnn("FamilyTreeDB")))
             {
                 var newDashboard = new Dashboard();
-                List<Person> people = newDashboard.people;
-                List<Person> newPersonToDataBase = new List<Person>();
-                bool motherSuccess = false, fatherSuccess = false;
+                List<Person> people = GetAll();
                 bool success;
-                int YOBint = 0, YODint = 0, momId = 0, dadId = 0;
+                int YOBint = 0, YODint = 0;
 
                 success = Int32.TryParse(_yearOfBirth, out YOBint);
                 success = Int32.TryParse(_yearOfDeath, out YODint);
 
-                momId = newDashboard.GetParentsId(_motherName, people);
-                dadId = newDashboard.GetParentsId(_fatherName, people);
+                int momId = newDashboard.GetParentsId(_motherName, people);
+                int dadId = newDashboard.GetParentsId(_fatherName, people);
 
                 Person newPerson = new Person
                 {
-                    FullName = _fullName.Trim(), //string
-                    YearOfBirth = YOBint, //converted to int
-                    PlaceOfBirth = _birthPlace.Trim(), //string
-                    MotherId = momId, //converted to int
-                    FatherId = dadId, //converted to int
-                    YearOfDeath = YODint, //converted to int
-                    PlaceOfDeath = _placeOfDeath.Trim() //string
+                    FullName = _fullName.Trim(),
+                    YearOfBirth = YOBint,
+                    PlaceOfBirth = _birthPlace.Trim(),
+                    MotherId = momId,
+                    FatherId = dadId,
+                    YearOfDeath = YODint,
+                    PlaceOfDeath = _placeOfDeath.Trim()
                 };
 
-                bool contains = false;
-                for (int i = 0; i < people.Count; i++)
-                {
-                    if (newPerson.FullName == people[i].FullName)
-                    {
-                        contains = true;
-                    }
-                }
+                return CheckIfPersonAlreadyExist(connection, people, newPerson);
+            }
+        }
 
-                if (!contains)
+        /// <summary>
+        /// Only adds a new person to the database if it does not already exist.
+        /// Con to this: Only checks by full name, would use ID# if I wanted a more fool proof way.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="people"></param>
+        /// <param name="newPersonToDatabase"></param>
+        /// <param name="newPerson">Person to be added to DB.</param>
+        private List<Person> CheckIfPersonAlreadyExist(IDbConnection connection, List<Person> people, Person newPerson)
+        {
+            bool contains = false;
+            for (int i = 0; i < people.Count; i++)
+            {
+                if (newPerson.FullName == people[i].FullName)
                 {
-                    newPersonToDataBase.Clear();
-                    newPersonToDataBase.Add(newPerson);
-                    people.Add(newPerson);
-                    connection.Execute("dbo.People_Insert @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPersonToDataBase);
+                    contains = true;
                 }
             }
+
+            if (!contains)
+            {                
+                connection.Execute("dbo.People_Insert @fullName, @yearOfBirth, @placeOfBirth, @motherId, @fatherId, @yearOfDeath, @placeOfDeath", newPerson);
+                people.Add(newPerson);
+                return people;
+            }
+
+            return people;
         }
 
         /// <summary>
