@@ -37,6 +37,9 @@ namespace FamilyTree
                 {
                     connect.Close();
                 }
+
+                var dashboard = new Dashboard();
+                dashboard.RestoreDatabase();
             }
         }
 

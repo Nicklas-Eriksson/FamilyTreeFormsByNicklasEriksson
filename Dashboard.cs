@@ -355,9 +355,7 @@ namespace FamilyTree
                     catch
                     {
                     }
-
                 }
-
             }
         }
 
@@ -445,7 +443,7 @@ namespace FamilyTree
         /// <summary>
         /// When the "Restore Database" button is pressed it resets to the preset mock data.
         /// </summary>
-        private void RestoreDatabase()
+        public void RestoreDatabase()
         {
             var DA = new DataAccess();
             DA.RemakeTable();
@@ -525,8 +523,8 @@ namespace FamilyTree
                 GetParentsNamesFrom(people);
             }
 
-            UpdateScrollListData(dataAccess);
             CRUDTextBoxClear();
+            UpdateScrollListData(dataAccess);
         }
 
         /// <summary>
